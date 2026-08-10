@@ -45,6 +45,25 @@ export default function Squad() {
             },
           )
         })
+        // stats entram quando o slide assenta — hover não existe numa gravação
+        gsap.utils.toArray<HTMLElement>('[data-player-stats]').forEach((stats) => {
+          gsap.fromTo(
+            stats,
+            { opacity: 0, y: 24 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: stats,
+                containerAnimation: horizontal,
+                start: 'left 45%',
+                toggleActions: 'play none none reverse',
+              },
+            },
+          )
+        })
       })
     }, root)
     return () => ctx.revert()
@@ -70,28 +89,33 @@ export default function Squad() {
                          [filter:grayscale(1)_sepia(0.22)_contrast(1.08)_brightness(1.02)]
                          transition-[filter] duration-500 group-hover:[filter:none]"
             />
+            {/* legenda-ficha da foto (mesma voz das molduras do Legacy) */}
+            <p className="absolute bottom-6 right-[10vw] z-20 text-[10px] tracking-[0.3em] opacity-50">
+              № {p.number} — {p.nationality.toUpperCase()}
+            </p>
             <div className="relative z-20 self-start mt-[16vh]">
               <p className="font-display text-[2vw] text-gold">{p.index}</p>
               <p className="mt-1 text-sm tracking-[0.4em] opacity-60">{p.position}</p>
-              <div className="mt-[38vh] max-w-xs opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
-                <div className="flex gap-10 border-t border-gold/40 pt-4">
-                  <div>
-                    <p className="text-xs tracking-[0.3em] opacity-50">NUMBER</p>
-                    <p className="font-display text-4xl text-gold">{p.number}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs tracking-[0.3em] opacity-50">NATION</p>
-                    <p className="font-display text-2xl">{p.nationality}</p>
-                  </div>
-                  {p.stats.map((s) => (
-                    <div key={s.label}>
-                      <p className="text-xs tracking-[0.3em] opacity-50">{s.label}</p>
-                      <p className="font-display text-2xl">{s.value}</p>
-                    </div>
-                  ))}
+            </div>
+            {/* stats ancorados na base — visíveis quando o slide assenta */}
+            <div data-player-stats className="absolute bottom-[10vh] left-[8vw] z-20 max-w-md opacity-0">
+              <div className="flex gap-10 border-t border-gold/40 pt-4">
+                <div>
+                  <p className="text-xs tracking-[0.3em] opacity-50">NUMBER</p>
+                  <p className="font-display text-4xl text-gold">{p.number}</p>
                 </div>
-                <p className="mt-6 text-sm tracking-[0.3em] border-b border-gold/60 pb-1 inline-block">VIEW PLAYER →</p>
+                <div>
+                  <p className="text-xs tracking-[0.3em] opacity-50">NATION</p>
+                  <p className="font-display text-2xl">{p.nationality}</p>
+                </div>
+                {p.stats.map((s) => (
+                  <div key={s.label}>
+                    <p className="text-xs tracking-[0.3em] opacity-50">{s.label}</p>
+                    <p className="font-display text-2xl">{s.value}</p>
+                  </div>
+                ))}
               </div>
+              <p className="mt-6 text-sm tracking-[0.3em] border-b border-gold/60 pb-1 inline-block">VIEW PLAYER →</p>
             </div>
           </article>
         ))}

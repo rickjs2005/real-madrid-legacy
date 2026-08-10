@@ -33,8 +33,10 @@ export default function Legacy() {
         })
         slides.forEach((slide, i) => {
           if (i === 0) return
-          tl.to(slides[i - 1], { opacity: 0, scale: 0.97, duration: 1 })
-            .fromTo(slide, { opacity: 0 }, { opacity: 1, duration: 1 }, '<0.3')
+          // disciplina de crossfade: fade-out completo ANTES do próximo entrar —
+          // sobre fundo branco, estados sobrepostos viram texto fantasma legível
+          tl.to(slides[i - 1], { opacity: 0, duration: 0.5 })
+            .fromTo(slide, { opacity: 0 }, { opacity: 1, duration: 0.55 }, '>0.12')
           const frame = slide.querySelector<HTMLElement>('[data-frame]')
           if (frame) {
             tl.fromTo(
@@ -51,8 +53,8 @@ export default function Legacy() {
           // trilho: destaca o ano da era atual
           const eraIdx = i - 1
           if (eraIdx >= 0 && eraIdx < rail.length) {
-            if (eraIdx > 0) tl.to(rail[eraIdx - 1], { opacity: 0.35, color: '#f5f4f0', duration: 0.3 }, '<')
-            tl.to(rail[eraIdx], { opacity: 1, color: '#c9a24b', duration: 0.3 }, '<')
+            if (eraIdx > 0) tl.to(rail[eraIdx - 1], { opacity: 0.35, color: '#0a0a0a', duration: 0.3 }, '<')
+            tl.to(rail[eraIdx], { opacity: 1, color: '#a5802f', duration: 0.3 }, '<')
           }
         })
         // linha de progresso do trilho acompanha a travessia inteira

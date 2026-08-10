@@ -71,13 +71,13 @@ export default function Matchday() {
       <SectionLabel n="01" title="MATCHDAY" />
 
       <div className="mt-[4vh]">
-        <p data-club-home className="font-display text-[1.6vw] text-gold mb-2">NEXT MATCH</p>
-        <h2 data-club-home className="font-display text-[8vw] leading-[0.9]">
+        <p data-club-home className="font-display text-2xl text-gold mb-3">NEXT MATCH</p>
+        <h2 data-club-home className="font-display text-[6vw] leading-[0.95] whitespace-nowrap">
           {nextMatch.home}
         </h2>
-        <div className="flex items-baseline gap-[3vw]">
-          <span className="font-display text-[2.2vw] text-gold">VS</span>
-          <h2 data-club-away className="font-display text-[8vw] leading-[0.9]">
+        <div className="mt-1 flex items-start gap-6">
+          <span className="font-display text-[1.8vw] text-gold pt-[0.8vw]">VS</span>
+          <h2 data-club-away className="font-display text-[6vw] leading-[0.95] whitespace-nowrap">
             {nextMatch.away}
           </h2>
         </div>

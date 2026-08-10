@@ -93,11 +93,15 @@ export function deriveStops(anchors: AnchorMeasurement[], start: number, end: nu
 // fundo já deve ter chegado quando aquela seção COMEÇA — a transição pro próximo
 // tom acontece ao longo do scroll da seção anterior (scroll da seção "b", entre
 // b e c), nunca dentro da seção que precisa do contraste já resolvido.
-const SECTION_ANCHORS: { id: string; color: string }[] = [
+const SECTION_ANCHORS: { id: string; color: string; holdBefore?: boolean }[] = [
   { id: 'hero', color: DAY },
-  { id: 'trophies', color: DAY }, // segura o branco até a porta do estádio
-  { id: 'bernabeu', color: NIGHT }, // o único mergulho noturno
-  { id: 'latest', color: DAY }, // saiu do estádio: branco de novo
+  { id: 'trophies', color: DAY },
+  // holdBefore: injeta uma âncora DAY um viewport antes do Bernabéu — sem isso a
+  // interpolação branco→noite se espalha pelo pin inteiro do Trophies (a seção
+  // ficava cinza no meio); com isso o mergulho acontece só no último viewport,
+  // exatamente onde a cerimônia do véu noturno já cobre a tela.
+  { id: 'bernabeu', color: NIGHT, holdBefore: true },
+  { id: 'latest', color: DAY },
   { id: 'madridista', color: DAY },
 ]
 
@@ -109,7 +113,7 @@ const SECTION_ANCHORS: { id: string; color: string }[] = [
 function measureStops(self: ScrollTrigger): ArcStop[] {
   const scrollY = window.scrollY
   const anchors: AnchorMeasurement[] = []
-  for (const { id, color } of SECTION_ANCHORS) {
+  for (const { id, color, holdBefore } of SECTION_ANCHORS) {
     const el = document.getElementById(id)
     if (!el) continue
     // Squad/Legacy/Trophies/Bernabéu são pinadas: o GSAP tira o elemento do
@@ -121,7 +125,11 @@ function measureStops(self: ScrollTrigger): ArcStop[] {
     // na posição documento correta (é ele que tem a altura do scroll pinado),
     // então medir o spacer é imune a isso.
     const box = el.parentElement?.classList.contains('pin-spacer') ? el.parentElement : el
-    anchors.push({ color, top: box.getBoundingClientRect().top + scrollY })
+    const top = box.getBoundingClientRect().top + scrollY
+    if (holdBefore && anchors.length > 0) {
+      anchors.push({ color: anchors[anchors.length - 1].color, top: top - window.innerHeight })
+    }
+    anchors.push({ color, top })
   }
   return deriveStops(anchors, self.start, self.end)
 }

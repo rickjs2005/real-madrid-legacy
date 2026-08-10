@@ -53,7 +53,7 @@ export default function Hero() {
   return (
     <section ref={root} id="hero" className="relative h-screen overflow-hidden bg-day">
       {/* faixa fotográfica editorial entre listras douradas */}
-      <div data-hero-band className="absolute left-0 right-0 top-[24vh] z-0 h-[46vh] overflow-hidden border-y border-gold/50">
+      <div data-hero-band className="absolute left-0 right-0 top-[34vh] z-0 h-[44vh] overflow-hidden border-y border-gold/50">
         <img
           src="/assets/hero/stadium-night.webp"
           alt="Santiago Bernabéu on a European night"
@@ -61,27 +61,26 @@ export default function Hero() {
           className="h-full w-full object-cover object-center
                      [filter:grayscale(0.85)_sepia(0.2)_contrast(1.1)_brightness(0.9)]"
         />
-        <div className="pointer-events-none absolute inset-0 bg-day/10" />
+        {/* lado esquerdo escurecido: é onde MADRID e a tagline cruzam a foto */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-night/60 via-night/15 to-transparent" />
       </div>
 
-      <div data-hero-title className="relative z-10 flex h-full flex-col justify-center pl-[8vw]">
+      <div data-hero-title className="relative z-10 flex h-full flex-col justify-start pt-[9vh] pl-[8vw]">
         <div className="overflow-hidden">
           <h1 data-line className="font-display text-[13vw] leading-[0.86] tracking-tight">REAL</h1>
         </div>
         <div className="overflow-hidden">
           <h1 data-line className="font-display text-[13vw] leading-[0.86] tracking-tight">MADRID</h1>
         </div>
-        <div className="overflow-hidden mt-5">
-          <p data-line data-hero-tag className="font-display text-[2.4vw] text-gold">THE LEGACY NEVER STOPS.</p>
+        <div className="overflow-hidden mt-6">
+          {/* sobre a fotografia escura: dourado brilhante */}
+          <p data-line data-hero-tag className="font-display text-[2.4vw] text-gold-bright">THE LEGACY NEVER STOPS.</p>
         </div>
       </div>
 
-      <div data-quiet className="absolute bottom-10 left-[8vw] z-10">
-        <p className="text-[10px] tracking-[0.4em] opacity-60">EST. {founded}</p>
-        <p className="font-display text-2xl mt-2">
-          <span className="text-gold">{europeanCups}</span> EUROPEAN CUPS
-        </p>
-      </div>
+      <p data-quiet className="absolute bottom-10 left-[8vw] z-10 text-xs tracking-[0.35em] opacity-70">
+        EST. {founded} — <span className="font-display text-xl tracking-normal text-gold">{europeanCups}</span> EUROPEAN CUPS
+      </p>
 
       <button
         data-quiet

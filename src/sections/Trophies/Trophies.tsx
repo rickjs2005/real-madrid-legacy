@@ -6,9 +6,10 @@ import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// A sala de troféus: fotografia real do museu do clube como fundo em parallax
-// (camada lenta) e os números monumentais na frente (camada rápida) — dois
-// planos de profundidade, não uma tabela de estatísticas.
+// A sala de troféus como faixa escura entre listras douradas (o vocabulário do
+// hero): a fotografia do museu fica escura como é de verdade, os números
+// monumentais atravessam a faixa por cima, e o final da seção é a cerimônia do
+// apagar das luzes — o véu noturno que entrega a página ao Bernabéu.
 export default function Trophies() {
   const root = useRef<HTMLElement>(null)
 
@@ -21,7 +22,7 @@ export default function Trophies() {
           scrollTrigger: {
             trigger: root.current,
             start: 'top top',
-            end: () => `+=${slides.length * 100}%`,
+            end: () => `+=${slides.length * 100 + 60}%`,
             pin: true,
             scrub: 0.5,
           },
@@ -30,28 +31,33 @@ export default function Trophies() {
           const counter = slide.querySelector('[data-count]') as HTMLElement
           const target = Number(counter.dataset.count)
           if (i > 0) {
-            tl.to(slides[i - 1], { opacity: 0, yPercent: -8, duration: 1 })
-            tl.fromTo(slide, { opacity: 0, yPercent: 8 }, { opacity: 1, yPercent: 0, duration: 1 }, '<0.3')
+            // disciplina de crossfade: o anterior SOME por completo antes do
+            // próximo entrar — sem estados fantasmas sobre o branco
+            tl.to(slides[i - 1], { opacity: 0, duration: 0.45 })
+            tl.fromTo(slide, { opacity: 0, yPercent: 4 }, { opacity: 1, yPercent: 0, duration: 0.5 }, '>0.12')
           }
           tl.fromTo(
             counter,
             { innerText: 0 },
-            { innerText: target, snap: { innerText: 1 }, duration: 1.2, ease: 'power1.out' },
-            i === 0 ? 0 : '<0.2',
+            { innerText: target, snap: { innerText: 1 }, duration: 1, ease: 'power1.out' },
+            i === 0 ? 0 : '<0.15',
           )
         })
-        // parallax do fundo: a sala atravessa a seção mais devagar que os números
+        // cerimônia: as luzes se apagam — véu noturno + linha dourada
+        tl.to('[data-trophy]', { opacity: 0, duration: 0.4 }, '+=0.3')
+        tl.fromTo('[data-nightveil]', { opacity: 0 }, { opacity: 1, duration: 0.7 }, '<0.1')
+        tl.fromTo('[data-nightline]', { scaleX: 0 }, { scaleX: 1, duration: 0.5, ease: 'power2.inOut' }, '<0.25')
+        // parallax do fundo: a sala atravessa a faixa mais devagar que os números
         gsap.fromTo(
           '[data-room]',
-          { yPercent: -8, scale: 1.12 },
+          { xPercent: -5 },
           {
-            yPercent: 8,
-            scale: 1.12,
+            xPercent: 5,
             ease: 'none',
             scrollTrigger: {
               trigger: root.current,
               start: 'top top',
-              end: () => `+=${slides.length * 100}%`,
+              end: () => `+=${slides.length * 100 + 60}%`,
               scrub: 0.6,
             },
           },
@@ -63,33 +69,32 @@ export default function Trophies() {
 
   return (
     <section ref={root} id="trophies" className="relative h-screen overflow-hidden">
-      <div className="absolute inset-0 overflow-hidden">
+      {/* faixa escura da sala de troféus entre listras douradas */}
+      <div className="absolute left-0 right-0 top-[26vh] h-[46vh] overflow-hidden border-y border-gold/50 bg-night">
         <img
           data-room
           src="/assets/trophies/room.webp"
           alt="Real Madrid trophy room"
           onError={(e) => (e.currentTarget.style.display = 'none')}
-          className="h-full w-full object-cover opacity-30
-                     [filter:grayscale(0.85)_sepia(0.3)_contrast(1.05)_brightness(1.15)]"
+          className="h-full w-full scale-110 object-cover
+                     [filter:grayscale(0.5)_sepia(0.25)_contrast(1.15)_brightness(0.8)]"
         />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(245,244,240,0.92))]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-night/70 via-transparent to-night/40" />
       </div>
       <SectionLabel n="04" title="TROPHIES" className="absolute top-[8vh] left-[8vw] z-10" />
       {trophies.map((t, i) => (
-        <div
-          key={t.name}
-          data-trophy
-          className="absolute inset-0 z-10 flex items-center px-[10vw]"
-          style={{ opacity: i === 0 ? 1 : 0 }}
-        >
-          <div>
-            <p data-count={t.count} className="font-display text-[24vw] leading-none text-gold">
-              {t.count}
-            </p>
-            <p className="font-display text-[3vw]">{t.name}</p>
-          </div>
+        <div key={t.name} data-trophy className="absolute inset-0 z-10 px-[8vw]" style={{ opacity: i === 0 ? 1 : 0 }}>
+          {/* número monumental atravessando a faixa; nome ancorado abaixo dela */}
+          <p data-count={t.count} className="absolute top-[9vh] font-display text-[30vh] leading-none text-gold-bright drop-shadow-[0_2px_18px_rgba(5,7,15,0.45)]">
+            {t.count}
+          </p>
+          <p className="absolute top-[74vh] font-display text-[3vw] leading-none">{t.name}</p>
         </div>
       ))}
+      {/* véu do apagar das luzes — entrega a página à noite do Bernabéu */}
+      <div data-nightveil className="pointer-events-none absolute inset-0 z-20 bg-night opacity-0">
+        <div data-nightline className="absolute left-[20vw] right-[20vw] top-1/2 h-px bg-gold-bright/70" style={{ transform: 'scaleX(0)' }} />
+      </div>
     </section>
   )
 }

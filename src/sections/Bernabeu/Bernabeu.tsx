@@ -132,7 +132,7 @@ export default function Bernabeu() {
           05 — THE HOME OF LEGENDS
         </p>
         <div data-bquote className="absolute bottom-[14vh] text-center">
-          <p className="font-display text-[2.4vw] text-gold">
+          <p className="font-display text-[2.4vw] text-gold-bright">
             “90 minuti en el Bernabéu son molto longo.”
           </p>
           <p className="mt-3 text-xs tracking-[0.35em] opacity-50">JUANITO, 1985</p>
