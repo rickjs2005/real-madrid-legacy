@@ -14,7 +14,7 @@ export default function Squad() {
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         const track = root.current!.querySelector('[data-track]') as HTMLElement
-        gsap.to(track, {
+        const horizontal = gsap.to(track, {
           x: () => -(track.scrollWidth - window.innerWidth),
           ease: 'none',
           scrollTrigger: {
@@ -25,6 +25,25 @@ export default function Squad() {
             scrub: 0.6,
             invalidateOnRefresh: true,
           },
+        })
+        // parallax de profundidade: cada foto atravessa a tela um pouco mais
+        // devagar que o texto (containerAnimation ancora no deslocamento do track)
+        gsap.utils.toArray<HTMLElement>('[data-player-photo]').forEach((photo) => {
+          gsap.fromTo(
+            photo,
+            { xPercent: -7 },
+            {
+              xPercent: 7,
+              ease: 'none',
+              scrollTrigger: {
+                trigger: photo,
+                containerAnimation: horizontal,
+                start: 'left right',
+                end: 'right left',
+                scrub: true,
+              },
+            },
+          )
         })
       })
     }, root)
@@ -38,6 +57,7 @@ export default function Squad() {
         {players.map((p) => (
           <article key={p.index} className="group relative flex h-screen w-screen shrink-0 items-center px-[8vw]">
             <img
+              data-player-photo
               src={`/assets/squad/p${p.index}.webp`}
               alt={p.name}
               onError={(e) => (e.currentTarget.style.display = 'none')}

@@ -6,12 +6,9 @@ import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
-const ASSET: Record<string, string> = {
-  'EUROPEAN CUPS': 'european-cup',
-  'LA LIGA': 'la-liga',
-  'COPA DEL REY': 'copa-del-rey',
-}
-
+// A sala de troféus: fotografia real do museu do clube como fundo em parallax
+// (camada lenta) e os números monumentais na frente (camada rápida) — dois
+// planos de profundidade, não uma tabela de estatísticas.
 export default function Trophies() {
   const root = useRef<HTMLElement>(null)
 
@@ -43,6 +40,22 @@ export default function Trophies() {
             i === 0 ? 0 : '<0.2',
           )
         })
+        // parallax do fundo: a sala atravessa a seção mais devagar que os números
+        gsap.fromTo(
+          '[data-room]',
+          { yPercent: -8, scale: 1.12 },
+          {
+            yPercent: 8,
+            scale: 1.12,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: root.current,
+              start: 'top top',
+              end: () => `+=${slides.length * 100}%`,
+              scrub: 0.6,
+            },
+          },
+        )
       })
     }, root)
     return () => ctx.revert()
@@ -50,24 +63,31 @@ export default function Trophies() {
 
   return (
     <section ref={root} id="trophies" className="relative h-screen overflow-hidden text-day">
+      <div className="absolute inset-0 overflow-hidden">
+        <img
+          data-room
+          src="/assets/trophies/room.webp"
+          alt="Real Madrid trophy room"
+          onError={(e) => (e.currentTarget.style.display = 'none')}
+          className="h-full w-full object-cover opacity-35
+                     [filter:grayscale(0.8)_sepia(0.35)_contrast(1.1)_brightness(0.55)]"
+        />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(5,7,15,0.9))]" />
+      </div>
       <SectionLabel n="04" title="TROPHIES" className="absolute top-[8vh] left-[8vw] z-10" />
       {trophies.map((t, i) => (
         <div
           key={t.name}
           data-trophy
-          className="absolute inset-0 flex items-center justify-between px-[10vw]"
+          className="absolute inset-0 z-10 flex items-center px-[10vw]"
           style={{ opacity: i === 0 ? 1 : 0 }}
         >
           <div>
-            <p data-count={t.count} className="font-display text-[24vw] leading-none text-gold">{t.count}</p>
+            <p data-count={t.count} className="font-display text-[24vw] leading-none text-gold drop-shadow-[0_0_60px_rgba(201,162,75,0.35)]">
+              {t.count}
+            </p>
             <p className="font-display text-[3vw]">{t.name}</p>
           </div>
-          <img
-            src={`/assets/trophies/${ASSET[t.name]}.webp`}
-            alt={t.name}
-            onError={(e) => (e.currentTarget.style.display = 'none')}
-            className="h-[70vh] object-contain drop-shadow-[0_0_80px_rgba(201,162,75,0.25)]"
-          />
         </div>
       ))}
     </section>

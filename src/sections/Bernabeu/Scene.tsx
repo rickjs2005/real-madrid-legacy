@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
@@ -75,6 +75,60 @@ function LightCone({ from, to }: { from: [number, number, number]; to: [number, 
   )
 }
 
+// Torcida como pontos de luz nas arquibancadas: escala humana no estádio.
+// ~4200 pontos estáticos (sem update por frame) — custo de GPU desprezível.
+function Crowd() {
+  const { positions, colors } = useMemo(() => {
+    const N = 4200
+    const pos = new Float32Array(N * 3)
+    const col = new Float32Array(N * 3)
+    const gold = new THREE.Color('#c9a24b')
+    const dim = new THREE.Color('#39415a')
+    const bright = new THREE.Color('#cdd5e8')
+    for (let i = 0; i < N; i++) {
+      const a = Math.random() * Math.PI * 2
+      const tier = Math.random() < 0.5 ? 0 : 1
+      const r = tier === 0 ? 5.4 + Math.random() * 1.6 : 6.5 + Math.random() * 1.8
+      const y = tier === 0 ? 0.5 + Math.random() * 0.9 : 1.6 + Math.random() * 1.1
+      pos[i * 3] = Math.cos(a) * r * 1.4
+      pos[i * 3 + 1] = y
+      pos[i * 3 + 2] = Math.sin(a) * r
+      const roll = Math.random()
+      // raros flashes dourados/claros no meio da massa escura (celulares na arquibancada)
+      const c = roll < 0.02 ? gold : roll < 0.06 ? bright : dim
+      col[i * 3] = c.r
+      col[i * 3 + 1] = c.g
+      col[i * 3 + 2] = c.b
+    }
+    return { positions: pos, colors: col }
+  }, [])
+  return (
+    <points>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+      </bufferGeometry>
+      <pointsMaterial size={0.05} vertexColors sizeAttenuation depthWrite={false} />
+    </points>
+  )
+}
+
+// Feixe de première varrendo o céu do estádio, bem lento
+function LightSweep() {
+  const g = useRef<THREE.Group>(null)
+  useFrame((_, delta) => {
+    if (g.current) g.current.rotation.y += delta * 0.12
+  })
+  return (
+    <group ref={g}>
+      <mesh position={[3, 4.2, 0]} rotation={[0, 0, Math.PI / 4.5]}>
+        <coneGeometry args={[0.7, 8, 20, 1, true]} />
+        <meshBasicMaterial color="#d9b25f" transparent opacity={0.035} side={THREE.DoubleSide} depthWrite={false} blending={THREE.AdditiveBlending} />
+      </mesh>
+    </group>
+  )
+}
+
 function Stadium() {
   const pitch = useMemo(makePitchTexture, [])
   // escala global: o bowl inteiro precisa caber no enquadramento aéreo
@@ -125,6 +179,8 @@ function Stadium() {
       {CONE_SOURCES.map((from, i) => (
         <LightCone key={i} from={from} to={[from[0] * 0.25, 0, from[2] * 0.25]} />
       ))}
+      <Crowd />
+      <LightSweep />
       {/* iluminação real do campo — spotlights miram a origem por padrão */}
       <ambientLight intensity={0.12} />
       {[[-6, 6, -4], [6, 6, -4], [-6, 6, 4], [6, 6, 4]].map((p, i) => (
