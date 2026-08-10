@@ -45,6 +45,33 @@ export default function Squad() {
             },
           )
         })
+        // o número da camisa se ESCREVE em traço dourado conforme o slide chega
+        // (stroke-dashoffset com scrub), e preenche como marca d'água ao assentar
+        gsap.utils.toArray<SVGTextElement>('[data-shirt-number] text').forEach((numeral) => {
+          const article = numeral.closest('article')
+          gsap.to(numeral, {
+            strokeDashoffset: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: article,
+              containerAnimation: horizontal,
+              start: 'left 90%',
+              end: 'left 38%',
+              scrub: true,
+            },
+          })
+          gsap.to(numeral, {
+            fill: 'rgba(165,128,47,0.10)',
+            duration: 0.9,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: article,
+              containerAnimation: horizontal,
+              start: 'left 42%',
+              toggleActions: 'play none none reverse',
+            },
+          })
+        })
         // stats entram quando o slide assenta — hover não existe numa gravação
         gsap.utils.toArray<HTMLElement>('[data-player-stats]').forEach((stats) => {
           gsap.fromTo(
@@ -75,9 +102,29 @@ export default function Squad() {
       <div data-track className="flex h-screen w-max">
         {players.map((p) => (
           <article key={p.index} className="group relative flex h-screen w-screen shrink-0 items-center px-[8vw]">
-            {/* sanduíche tipográfico: o nome atravessa POR TRÁS da foto (z-0 < z-10),
-                enquanto índice, posição e stats ficam na frente (z-20) */}
-            <h2 className="absolute left-[8vw] z-0 font-display text-[10.5vw] leading-[0.9] whitespace-nowrap">
+            {/* o número da camisa gigante, escrito em traço dourado no fundo */}
+            <svg
+              data-shirt-number
+              aria-hidden
+              className="absolute left-[4vw] top-[4vh] z-0 h-[78vh] overflow-visible"
+              viewBox="0 0 900 760"
+            >
+              <text
+                x="0"
+                y="640"
+                className="font-display"
+                fontSize="720"
+                fill="transparent"
+                stroke="#a5802f"
+                strokeWidth="3"
+                style={{ strokeDasharray: 2600, strokeDashoffset: 2600 }}
+              >
+                {p.number}
+              </text>
+            </svg>
+            {/* sanduíche tipográfico: o nome atravessa POR TRÁS da foto (z abaixo
+                da foto), enquanto índice, posição e stats ficam na frente (z-20) */}
+            <h2 className="absolute left-[8vw] z-[1] font-display text-[10.5vw] leading-[0.9] whitespace-nowrap">
               {p.name}
             </h2>
             <img
