@@ -3,6 +3,7 @@ import DesktopGate from './components/DesktopGate'
 import Hero from './sections/Hero/Hero'
 import Matchday from './sections/Matchday/Matchday'
 import Squad from './sections/Squad/Squad'
+import Legacy from './sections/Legacy/Legacy'
 import { initSmoothScroll } from './lib/lenis'
 import { mountLightArc } from './lib/lightArc'
 
@@ -18,6 +19,7 @@ export default function App() {
         <Hero />
         <Matchday />
         <Squad />
+        <Legacy />
       </main>
     </>
   )
