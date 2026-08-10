@@ -19,7 +19,10 @@ if (!RAW_DIR) {
 const MAX_WIDTH = 1600
 const WEBP_QUALITY = 80
 
-// raw filename (inside RAW_DIR) -> destination path (inside public/assets)
+// raw filename (inside RAW_DIR) -> destination path (inside public/assets).
+// A plain string uses the defaults above; an object overrides width/quality
+// per entry (e.g. the trophy room backdrop wants a wider max + slightly
+// leaner quality since it's a full-bleed background, not a portrait).
 const MAP = {
   '1902.jpg': 'assets/legacy/1902.webp',
   '1956.jpg': 'assets/legacy/1956.webp',
@@ -37,13 +40,15 @@ const MAP = {
   '1960.jpg': 'assets/legacy/1960.webp',
   '1986.jpg': 'assets/legacy/1986.webp',
   '2018.jpg': 'assets/legacy/2018.webp',
+  'room.jpg': { dest: 'assets/trophies/room.webp', width: 1920, quality: 78 },
+  'european-cup.jpg': { dest: 'assets/trophies/european-cup.webp', width: 1920, quality: 78 },
 }
 
 // RAW_DIR only needs to hold the source files for the slots being
 // (re)processed in a given run — entries whose source is absent are skipped
 // rather than treated as an error, so this script stays reusable for partial
 // (e.g. new-eras-only) sourcing passes.
-for (const [srcName, destRel] of Object.entries(MAP)) {
+for (const [srcName, entry] of Object.entries(MAP)) {
   const srcPath = path.join(RAW_DIR, srcName)
   try {
     await access(srcPath)
@@ -52,12 +57,16 @@ for (const [srcName, destRel] of Object.entries(MAP)) {
     continue
   }
 
+  const destRel = typeof entry === 'string' ? entry : entry.dest
+  const width = typeof entry === 'string' ? MAX_WIDTH : entry.width
+  const quality = typeof entry === 'string' ? WEBP_QUALITY : entry.quality
+
   const destPath = path.join(REPO_ROOT, 'public', destRel)
   await mkdir(path.dirname(destPath), { recursive: true })
 
   await sharp(srcPath)
-    .resize({ width: MAX_WIDTH, withoutEnlargement: true })
-    .webp({ quality: WEBP_QUALITY })
+    .resize({ width, withoutEnlargement: true })
+    .webp({ quality })
     .toFile(destPath)
 
   console.log(`${srcName} -> ${destRel}`)

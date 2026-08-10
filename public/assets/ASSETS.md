@@ -10,7 +10,9 @@ IA (Higgsfield): SOMENTE texturas/atmosferas, nunca rostos.
 | squad/p01.webp … p06.webp | 1 foto por jogador de squad.ts, corpo inteiro, fundo removido | Wikimedia Commons (ver créditos) | **preenchido** |
 | legacy/1902.webp … 2024.webp | 1 foto histórica por era de legacy.ts | Wikimedia Commons (ver créditos) | **preenchido** |
 | legacy/1960.webp, 1986.webp, 2018.webp | 3 eras adicionais (expansão para 8 eras) | Wikimedia Commons (ver créditos) | **preenchido** |
-| trophies/european-cup.webp, la-liga.webp, copa-del-rey.webp | Troféu recortado, fundo transparente | — | **pulado** (nenhuma foto PD/CC limpa encontrada) |
+| trophies/room.webp | Sala de troféus / museu, fundo full-bleed da seção Trophies | Wikimedia Commons (ver créditos) | **preenchido** |
+| trophies/european-cup.webp | Taça de Campeões da Europa / Champions League | Wikimedia Commons (ver créditos) | **preenchido** |
+| trophies/la-liga.webp, copa-del-rey.webp | Troféu recortado, fundo transparente | — | **pulado** (nenhuma foto PD/CC limpa encontrada) |
 | bernabeu/aerial.webp | Exterior do Bernabéu reformado (dez/2024) | Wikimedia Commons (ver créditos) | **preenchido** |
 | bernabeu/stadium.glb | Modelo 3D (Sketchfab, licença CC) OU omitir → seção usa low-poly próprio | download | pendente |
 | shop/kit-home.webp, kit-away.webp | Camisas 26/27 recortadas | — | **pulado** (marketing copyrighted, não sourced) |
@@ -40,6 +42,8 @@ marketing de produto foi sourced (ver linhas "pulado" acima).
 | squad/p05.webp (Bernardo Silva) | [Bernardo Silva Croatia v Portugal 2 July 2026-238.jpg](https://commons.wikimedia.org/wiki/File:Bernardo_Silva_Croatia_v_Portugal_2_July_2026-238.jpg) | Bryan Berlin / WikiPortraits | CC BY-SA 4.0 |
 | squad/p06.webp (Courtois) | [FC RB Salzburg versus Real Madrid (Testspiel, 7. August 2019) 03.jpg](https://commons.wikimedia.org/wiki/File:FC_RB_Salzburg_versus_Real_Madrid_(Testspiel,_7._August_2019)_03.jpg) | Werner100359 | CC BY-SA 4.0 |
 | bernabeu/aerial.webp | [M-estadio-santiago-bernabeu-diciembre-2024-a.jpg](https://commons.wikimedia.org/wiki/File:M-estadio-santiago-bernabeu-diciembre-2024-a.jpg) | MottaW | CC BY 4.0 |
+| trophies/room.webp | [170928 Museo del Real Madrid C. F.jpg](https://commons.wikimedia.org/wiki/File:170928_Museo_del_Real_Madrid_C._F.jpg) | Lệ Xuân | CC BY-SA 4.0 |
+| trophies/european-cup.webp | [UEFA Champions League original trophy (1995-2005).jpg](https://commons.wikimedia.org/wiki/File:UEFA_Champions_League_original_trophy_(1995-2005).jpg) | Jay Clark | CC BY-SA 2.5 |
 
 Notas de sourcing:
 - Nenhuma foto de 1902/1956/1998/2002/2014 mostra necessariamente o jogador citado no ano exato do
@@ -55,3 +59,12 @@ Notas de sourcing:
   são as fotos mais recentes e de maior resolução com licença livre encontradas para cada um.
 - squad/p04 (Valverde) ficou com ~19KB após compressão webp — verificado visualmente, é uma foto real
   e nítida (still de entrevista oficial do Real Madrid), só comprime bem por ter fundo desfocado liso.
+- trophies/room.webp: foto grande-angular do próprio Museo del Real Madrid (túnel do tour do
+  Bernabéu, set de 3 prateleiras com troféus, bolas, chuteiras e camisas de época) — CC BY-SA 4.0,
+  8058×3934 original, redimensionada para 1920px de largura (script agora aceita overrides de
+  largura/qualidade por item para este backdrop full-bleed).
+- trophies/european-cup.webp: primeira candidata cogitada (foto de 2006 da Taça na comemoração do
+  Barcelona, gramado + torcida blaugrana ao fundo) foi descartada apesar de maior resolução — fundo
+  claramente identificável como Barcelona é o tipo de mismatch temático que vale recusar num site do
+  Real Madrid. Trocada pela taça original 1995–2005 em vitrine escura com fita comemorativa "50 YEARS"
+  da própria UEFA (neutra, sem cores de clube), ainda que em resolução menor (550×969 nativo).

@@ -31,5 +31,7 @@ Photos sourced from Wikimedia Commons under their individual licenses:
 - Bernardo Silva, Croatia v Portugal, 2026 — Bryan Berlin / WikiPortraits, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Bernardo_Silva_Croatia_v_Portugal_2_July_2026-238.jpg
 - Thibaut Courtois, RB Salzburg v Real Madrid, 2019 — Werner100359, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:FC_RB_Salzburg_versus_Real_Madrid_(Testspiel,_7._August_2019)_03.jpg
 - Estadio Santiago Bernabéu exterior, December 2024 — MottaW, CC BY 4.0 — https://commons.wikimedia.org/wiki/File:M-estadio-santiago-bernabeu-diciembre-2024-a.jpg
+- Museo del Real Madrid, Bernabéu tour — Lệ Xuân, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:170928_Museo_del_Real_Madrid_C._F.jpg
+- UEFA Champions League original trophy (1995–2005) — Jay Clark, CC BY-SA 2.5 — https://commons.wikimedia.org/wiki/File:UEFA_Champions_League_original_trophy_(1995-2005).jpg
 
-Club crest, kit product shots and trophy photos were not sourced (trademark / no clean free-license image found) — see `public/assets/ASSETS.md` for the full slot-by-slot status.
+Club crest, kit product shots and two trophy silhouettes (La Liga, Copa del Rey) were not sourced (trademark / no clean free-license image found) — see `public/assets/ASSETS.md` for the full slot-by-slot status.
