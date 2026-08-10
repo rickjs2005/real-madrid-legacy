@@ -5,7 +5,7 @@
 // reads from RAW_DIR and writes into public/assets/**. Nothing here touches
 // color/duotone — that treatment is applied at runtime by the components.
 import sharp from 'sharp'
-import { mkdir } from 'node:fs/promises'
+import { mkdir, access } from 'node:fs/promises'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -34,10 +34,24 @@ const MAP = {
   'p05_bernardo.jpg': 'assets/squad/p05.webp',
   'p06_courtois.jpg': 'assets/squad/p06.webp',
   'bernabeu_aerial.jpg': 'assets/bernabeu/aerial.webp',
+  '1960.jpg': 'assets/legacy/1960.webp',
+  '1986.jpg': 'assets/legacy/1986.webp',
+  '2018.jpg': 'assets/legacy/2018.webp',
 }
 
+// RAW_DIR only needs to hold the source files for the slots being
+// (re)processed in a given run — entries whose source is absent are skipped
+// rather than treated as an error, so this script stays reusable for partial
+// (e.g. new-eras-only) sourcing passes.
 for (const [srcName, destRel] of Object.entries(MAP)) {
   const srcPath = path.join(RAW_DIR, srcName)
+  try {
+    await access(srcPath)
+  } catch {
+    console.log(`${srcName} -> (skipped, not present in RAW_DIR)`)
+    continue
+  }
+
   const destPath = path.join(REPO_ROOT, 'public', destRel)
   await mkdir(path.dirname(destPath), { recursive: true })
 
