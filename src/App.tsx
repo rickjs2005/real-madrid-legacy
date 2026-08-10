@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import DesktopGate from './components/DesktopGate'
 import Hero from './sections/Hero/Hero'
 import Matchday from './sections/Matchday/Matchday'
+import Squad from './sections/Squad/Squad'
 import { initSmoothScroll } from './lib/lenis'
 import { mountLightArc } from './lib/lightArc'
 
@@ -16,6 +17,7 @@ export default function App() {
       <main id="page">
         <Hero />
         <Matchday />
+        <Squad />
       </main>
     </>
   )
