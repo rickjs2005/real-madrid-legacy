@@ -7,10 +7,11 @@ import { initSmoothScroll } from '../../lib/lenis'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Los Blancos: pôster branco monumental. O nome do clube em tinta sobre branco,
-// a fotografia da noite europeia como faixa editorial entre listras douradas, e
-// o nome atravessando POR CIMA da faixa (sanduíche). No scroll, a faixa cresce
-// e escurece — um gostinho da noite que só volta inteira no Bernabéu.
+// Cold open de documentário: a noite europeia em viewport inteira, REAL MADRID
+// em branco-osso monumental sobre o canto mais escuro da fotografia (um único
+// ponto focal), duas assinaturas e nada mais. Na carga, a cena revela do preto;
+// no scroll, a foto avança e um véu branco amanhece — match-cut para o mundo
+// branco do site. A noite só volta no clímax (Bernabéu): bookends.
 export default function Hero() {
   const root = useRef<HTMLElement>(null)
   const europeanCups = trophies.find((t) => t.name === 'EUROPEAN CUPS')?.count ?? 15
@@ -19,24 +20,27 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap.timeline({ defaults: { ease: 'power4.out' } })
-          .fromTo('[data-hero-band]', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.5, ease: 'power2.inOut' }, 0.1)
-          .from('[data-line]', { yPercent: 110, stagger: 0.14, duration: 1.1 }, 0.5)
-          .from('[data-quiet]', { opacity: 0, duration: 0.9, ease: 'none' }, 1.4)
-        // transformação: a faixa avança e o texto cede — prenúncio da noite
+        // abertura de filme: preto → estádio → nome → tagline → assinaturas
+        gsap.timeline({ defaults: { ease: 'power3.out' } })
+          .fromTo('[data-blackveil]', { opacity: 1 }, { opacity: 0, duration: 1.5, ease: 'power2.inOut' }, 0)
+          .fromTo('[data-hero-photo]', { scale: 1.18 }, { scale: 1.06, duration: 2.4, ease: 'power2.out' }, 0)
+          .from('[data-line]', { yPercent: 110, stagger: 0.16, duration: 1.1, ease: 'power4.out' }, 0.8)
+          .from('[data-quiet]', { opacity: 0, duration: 0.9, ease: 'none' }, 1.9)
+        // transformação: a foto avança, o nome sai, o dia amanhece → MATCHDAY
         gsap.timeline({
           scrollTrigger: {
             trigger: root.current,
             start: 'top top',
-            end: '+=80%',
+            end: '+=100%',
             pin: true,
             scrub: 0.5,
           },
         })
-          .to('[data-hero-band] img', { scale: 1.18, ease: 'none' }, 0)
-          .to('[data-hero-title]', { yPercent: -30, ease: 'none' }, 0)
-          .to('[data-hero-tag]', { opacity: 0, duration: 0.4 }, 0.1)
-          .to('[data-quiet]', { opacity: 0, duration: 0.35 }, 0.5)
+          .to('[data-hero-photo]', { scale: 1.3, ease: 'none' }, 0)
+          .to('[data-hero-title]', { yPercent: -70, ease: 'none' }, 0)
+          .to('[data-hero-tag]', { opacity: 0, duration: 0.3 }, 0.05)
+          .to('[data-quiet]', { opacity: 0, duration: 0.3 }, 0.4)
+          .fromTo('[data-dayveil]', { opacity: 0 }, { opacity: 1, duration: 0.45, ease: 'power2.in' }, 0.55)
         gsap.to('[data-scrollcue-line]', {
           scaleY: 0.2,
           transformOrigin: 'top',
@@ -51,45 +55,53 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={root} id="hero" className="relative h-screen overflow-hidden bg-day">
-      {/* faixa fotográfica editorial entre listras douradas */}
-      <div data-hero-band className="absolute left-0 right-0 top-[34vh] z-0 h-[44vh] overflow-hidden border-y border-gold/50">
+    <section ref={root} id="hero" className="relative h-screen overflow-hidden bg-night text-day">
+      {/* a noite europeia em tela cheia */}
+      <div data-hero-photo className="absolute inset-0">
         <img
           src="/assets/hero/stadium-night.webp"
           alt="Santiago Bernabéu on a European night"
           onError={(e) => (e.currentTarget.style.display = 'none')}
-          className="h-full w-full object-cover object-center
-                     [filter:grayscale(0.85)_sepia(0.2)_contrast(1.1)_brightness(0.9)]"
+          className="h-full w-full object-cover
+                     [filter:grayscale(0.3)_sepia(0.15)_contrast(1.15)_brightness(0.8)]"
         />
-        {/* lado esquerdo escurecido: é onde MADRID e a tagline cruzam a foto */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-night/60 via-night/15 to-transparent" />
+        {/* vinheta + peso no canto inferior esquerdo, onde vive a tipografia */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(5,7,15,0.7))]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-night/85 via-night/25 to-transparent" />
       </div>
 
-      <div data-hero-title className="relative z-10 flex h-full flex-col justify-start pt-[9vh] pl-[8vw]">
+      {/* nome monumental: Los Blancos sobre a noite — o único ponto focal */}
+      <div data-hero-title className="absolute bottom-[14vh] left-[8vw] z-10">
         <div className="overflow-hidden">
-          <h1 data-line className="font-display text-[13vw] leading-[0.86] tracking-tight">REAL</h1>
+          <h1 data-line className="font-display text-[15vw] leading-[0.84] tracking-tight">REAL</h1>
         </div>
         <div className="overflow-hidden">
-          <h1 data-line className="font-display text-[13vw] leading-[0.86] tracking-tight">MADRID</h1>
+          <h1 data-line className="font-display text-[15vw] leading-[0.84] tracking-tight">MADRID</h1>
         </div>
-        <div className="overflow-hidden mt-6">
-          {/* sobre a fotografia escura: dourado brilhante */}
-          <p data-line data-hero-tag className="font-display text-[2.4vw] text-gold-bright">THE LEGACY NEVER STOPS.</p>
+        <div className="overflow-hidden mt-5">
+          <p data-line data-hero-tag className="font-display text-[2.2vw] text-gold-bright">THE LEGACY NEVER STOPS.</p>
         </div>
       </div>
 
-      <p data-quiet className="absolute bottom-10 left-[8vw] z-10 text-xs tracking-[0.35em] opacity-70">
-        EST. {founded} — <span className="font-display text-xl tracking-normal text-gold">{europeanCups}</span> EUROPEAN CUPS
+      <p data-quiet className="absolute bottom-8 left-[8vw] z-10 text-[11px] tracking-[0.4em] opacity-70">
+        EST. {founded}
+      </p>
+      <p data-quiet className="absolute bottom-8 right-[16vw] z-10 text-[11px] tracking-[0.4em] opacity-70">
+        <span className="font-display text-lg tracking-normal text-gold-bright">{europeanCups}</span>{'  '}EUROPEAN CUPS
       </p>
 
       <button
         data-quiet
         onClick={() => initSmoothScroll().scrollTo('#matchday')}
-        className="absolute bottom-10 right-[4vw] z-10 flex flex-col items-center gap-3"
+        className="absolute bottom-8 right-[4vw] z-10 flex flex-col items-center gap-3"
       >
-        <span className="text-[10px] tracking-[0.4em] opacity-60">SCROLL TO ENTER</span>
-        <span data-scrollcue-line className="block h-14 w-px bg-gold" />
+        <span className="sr-only">Scroll to next section</span>
+        <span data-scrollcue-line className="block h-16 w-px bg-day/80" />
       </button>
+
+      {/* véus: preto (abertura) e branco (amanhecer para o MATCHDAY) */}
+      <div data-blackveil className="pointer-events-none absolute inset-0 z-30 bg-night opacity-0" />
+      <div data-dayveil className="pointer-events-none absolute inset-0 z-30 bg-day opacity-0" />
     </section>
   )
 }
