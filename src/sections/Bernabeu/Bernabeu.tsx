@@ -1,4 +1,5 @@
-import { Suspense, lazy, useEffect, useRef, useState } from 'react'
+import { Component, Suspense, lazy, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -15,6 +16,38 @@ function webglAvailable(): boolean {
   }
 }
 
+// Foto aérea com tratamento noturno: o fallback precisa respeitar o arco de luz
+// (a foto original é diurna — sem o filtro ela quebra a fase noite da página).
+function FallbackImage() {
+  return (
+    <>
+      <img
+        src="/assets/bernabeu/aerial.webp"
+        alt="Santiago Bernabéu"
+        onError={(e) => (e.currentTarget.style.display = 'none')}
+        className="h-full w-full object-cover opacity-50
+                   [filter:grayscale(0.9)_sepia(0.25)_hue-rotate(180deg)_brightness(0.45)_contrast(1.15)]"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(5,7,15,0.9))]" />
+    </>
+  )
+}
+
+// Se a cena 3D falhar em runtime (contexto WebGL perdido, GPU por software,
+// erro de shader), cai para a foto em vez de derrubar a árvore inteira.
+class SceneBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  componentDidCatch(error: Error) {
+    console.warn('[bernabeu] 3d scene failed, using photo fallback:', error.message)
+  }
+  render() {
+    return this.state.failed ? <FallbackImage /> : this.props.children
+  }
+}
+
 export default function Bernabeu() {
   const root = useRef<HTMLElement>(null)
   const progress = useRef(0)
@@ -23,9 +56,18 @@ export default function Bernabeu() {
   const [use3d] = useState(webglAvailable)
 
   useEffect(() => {
+    if (!use3d) console.warn('[bernabeu] webgl2 unavailable, using photo fallback')
+  }, [use3d])
+
+  useEffect(() => {
     // lazy mount: só carrega o chunk 3D quando a seção se aproxima
     const mountIo = new IntersectionObserver(
-      ([entry]) => entry.isIntersecting && setMount3d(true),
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          console.info('[bernabeu] mounting 3d scene')
+          setMount3d(true)
+        }
+      },
       { rootMargin: '100% 0px' },
     )
     // frameloop: renderiza só com a seção visível (spec: WebGL pausado fora do viewport)
@@ -70,16 +112,13 @@ export default function Bernabeu() {
     <section ref={root} id="bernabeu" className="relative h-screen overflow-hidden text-day">
       <div className="absolute inset-0">
         {use3d && mount3d ? (
-          <Suspense fallback={null}>
-            <Scene progress={progress} frameloop={inView ? 'always' : 'never'} />
-          </Suspense>
+          <SceneBoundary>
+            <Suspense fallback={<FallbackImage />}>
+              <Scene progress={progress} frameloop={inView ? 'always' : 'never'} />
+            </Suspense>
+          </SceneBoundary>
         ) : (
-          <img
-            src="/assets/bernabeu/aerial.webp"
-            alt="Santiago Bernabéu aerial view"
-            onError={(e) => (e.currentTarget.style.display = 'none')}
-            className="h-full w-full object-cover opacity-60"
-          />
+          <FallbackImage />
         )}
       </div>
       <div className="pointer-events-none relative z-10 flex h-full flex-col items-center justify-center">

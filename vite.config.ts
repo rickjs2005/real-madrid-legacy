@@ -18,4 +18,9 @@ function fullReloadForPinnedModules(): Plugin {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), fullReloadForPinnedModules()],
+  // três importadores de 'three' (fiber, postprocessing e o app) — sem dedupe o
+  // optimizer do Vite pode servir duas cópias em dev, o que quebra os
+  // instanceof internos do R3F ("Multiple instances of Three.js" no console)
+  resolve: { dedupe: ['three'] },
+  optimizeDeps: { include: ['three', '@react-three/fiber', '@react-three/postprocessing', 'postprocessing'] },
 })
