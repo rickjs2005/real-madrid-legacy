@@ -1,4 +1,6 @@
 import { useEffect } from 'react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import DesktopGate from './components/DesktopGate'
 import Hero from './sections/Hero/Hero'
 import Matchday from './sections/Matchday/Matchday'
@@ -13,10 +15,17 @@ import Footer from './sections/Footer/Footer'
 import { initSmoothScroll } from './lib/lenis'
 import { mountLightArc } from './lib/lightArc'
 
+gsap.registerPlugin(ScrollTrigger)
+
 export default function App() {
   useEffect(() => {
     initSmoothScroll()
     mountLightArc()
+    // pins (Squad, Bernabéu) dependem de medidas corretas do layout; fontes/imagens
+    // que chegam depois do primeiro paint podem deslocar alturas, então recalculamos
+    // os triggers quando fontes e o load completo do documento terminam.
+    document.fonts.ready.then(() => ScrollTrigger.refresh())
+    window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true })
   }, [])
   return (
     <>

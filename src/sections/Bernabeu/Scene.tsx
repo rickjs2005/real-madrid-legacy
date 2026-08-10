@@ -1,6 +1,11 @@
 import { Canvas, useFrame } from '@react-three/fiber'
 import type { MutableRefObject } from 'react'
 
+// Estádio próprio em geometria low-poly. Se um dia surgir um stadium.glb decente
+// (Sketchfab, licença CC — ver public/assets/ASSETS.md), trocar este grupo por
+// useGLTF('/assets/bernabeu/stadium.glb') mantendo a mesma coreografia de câmera
+// em <Rig>. Isso exige reinstalar @react-three/drei (removido daqui por estar
+// sem uso — nenhum helper dele é importado neste arquivo).
 function StadiumLowPoly() {
   return (
     <group>

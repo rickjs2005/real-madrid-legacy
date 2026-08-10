@@ -1,32 +1,13 @@
-# React + TypeScript + Vite
+# REAL MADRID — THE LEGACY
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Unofficial concept · one-page cinematic experience · desktop-only (built for recording)
 
-Currently, two official plugins are available:
+**Problem.** The official site works as an institutional news portal.
+**Proposal.** Explore how the same brand could turn its history, football and stadium into an immersive digital experience.
+**Result.** 10 sections, each with its own visual language, stitched by a continuous light arc (day → night → day), scrolling at 60fps.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Stack: Vite · React · TypeScript · Tailwind v4 · Lenis · GSAP ScrollTrigger · React Three Fiber (Bernabéu section only).
 
-## React Compiler
+All imagery and trademarks belong to Real Madrid CF. Data is a dated snapshot (10 Aug 2026) — this is a recorded case, not a live product.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Dev: `npm run dev` · Test: `npm test` · Build: `npm run build`
