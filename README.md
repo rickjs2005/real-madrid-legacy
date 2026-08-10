@@ -33,5 +33,6 @@ Photos sourced from Wikimedia Commons under their individual licenses:
 - Estadio Santiago Bernabéu exterior, December 2024 — MottaW, CC BY 4.0 — https://commons.wikimedia.org/wiki/File:M-estadio-santiago-bernabeu-diciembre-2024-a.jpg
 - Museo del Real Madrid, Bernabéu tour — Lệ Xuân, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:170928_Museo_del_Real_Madrid_C._F.jpg
 - UEFA Champions League original trophy (1995–2005) — Jay Clark, CC BY-SA 2.5 — https://commons.wikimedia.org/wiki/File:UEFA_Champions_League_original_trophy_(1995-2005).jpg
+- Santiago Bernabéu Stadium, Real Madrid v Borussia Dortmund (Champions League semi-final), 30 Apr 2013 — Little Savage, CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Santiago_Bernab%C3%A9u_Stadium,_Real_Madrid_-_Borussia_Dortmund,_2013_-_11.jpg
 
 Club crest, kit product shots and two trophy silhouettes (La Liga, Copa del Rey) were not sourced (trademark / no clean free-license image found) — see `public/assets/ASSETS.md` for the full slot-by-slot status.

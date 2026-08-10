@@ -7,6 +7,7 @@ IA (Higgsfield): SOMENTE texturas/atmosferas, nunca rostos.
 | Path | Conteúdo | Fonte | Status |
 |---|---|---|---|
 | hero/crest.webp | Escudo RM alto contraste | — | **pulado** (marca registrada, não sourced) |
+| hero/stadium-night.webp | Bernabéu de noite, jogo cheio, fundo full-viewport da seção Hero | Wikimedia Commons (ver créditos) | **preenchido** |
 | squad/p01.webp … p06.webp | 1 foto por jogador de squad.ts, corpo inteiro, fundo removido | Wikimedia Commons (ver créditos) | **preenchido** |
 | legacy/1902.webp … 2024.webp | 1 foto histórica por era de legacy.ts | Wikimedia Commons (ver créditos) | **preenchido** |
 | legacy/1960.webp, 1986.webp, 2018.webp | 3 eras adicionais (expansão para 8 eras) | Wikimedia Commons (ver créditos) | **preenchido** |
@@ -44,6 +45,7 @@ marketing de produto foi sourced (ver linhas "pulado" acima).
 | bernabeu/aerial.webp | [M-estadio-santiago-bernabeu-diciembre-2024-a.jpg](https://commons.wikimedia.org/wiki/File:M-estadio-santiago-bernabeu-diciembre-2024-a.jpg) | MottaW | CC BY 4.0 |
 | trophies/room.webp | [170928 Museo del Real Madrid C. F.jpg](https://commons.wikimedia.org/wiki/File:170928_Museo_del_Real_Madrid_C._F.jpg) | Lệ Xuân | CC BY-SA 4.0 |
 | trophies/european-cup.webp | [UEFA Champions League original trophy (1995-2005).jpg](https://commons.wikimedia.org/wiki/File:UEFA_Champions_League_original_trophy_(1995-2005).jpg) | Jay Clark | CC BY-SA 2.5 |
+| hero/stadium-night.webp | [Santiago Bernabéu Stadium, Real Madrid - Borussia Dortmund, 2013 - 11.jpg](https://commons.wikimedia.org/wiki/File:Santiago_Bernab%C3%A9u_Stadium,_Real_Madrid_-_Borussia_Dortmund,_2013_-_11.jpg) | Little Savage | CC BY-SA 3.0 |
 
 Notas de sourcing:
 - Nenhuma foto de 1902/1956/1998/2002/2014 mostra necessariamente o jogador citado no ano exato do
@@ -68,3 +70,20 @@ Notas de sourcing:
   claramente identificável como Barcelona é o tipo de mismatch temático que vale recusar num site do
   Real Madrid. Trocada pela taça original 1995–2005 em vitrine escura com fita comemorativa "50 YEARS"
   da própria UEFA (neutra, sem cores de clube), ainda que em resolução menor (550×969 nativo).
+- hero/stadium-night.webp: buscado como noite/atmosfera de jogo dentro do Bernabéu (não a fachada
+  externa reformada, que já cobre `bernabeu/aerial.webp`). Categoria
+  `Category:Interior of Santiago Bernabéu Stadium` cruzada com buscas "Bernabéu interior Champions
+  League" e "Bernabéu Champions League final" — a série de 16 fotos "Santiago Bernabéu Stadium, Real
+  Madrid - Borussia Dortmund, 2013" (semifinal da Champions 2012/13, 30/abr/2013, 21h04) por Little
+  Savage (CC BY-SA 3.0, 3264×2448 cada) rendeu o melhor conjunto: céu já escuro, refletores acesos,
+  gramado iluminado. Comparei visualmente ~9 quadros da série antes de escolher o 11: céu
+  genuinamente preto (não crepúsculo azul como nos quadros 01/05), dois torreões de refletor a pleno
+  brilho, curva completa da arquibancada com o setor visitante do Dortmund em amarelo/laranja contra
+  os assentos azuis do Real Madrid, e o gramado verde-vivo em primeiro plano — a composição com mais
+  profundidade e drama do lote para um fundo full-viewport. Outra candidata forte, "Real Madrid fans
+  at Santiago Bernabeu between the chreography vs. Bor. Dortmund.JPG" (mesma partida, mesmo dia,
+  5472×3648, CC BY-SA 3.0), tem uma coreografia/tifo branca mais dramática mas foi tirada às 20h39,
+  ainda com céu claramente claro ao fundo — descartada por não ler como "noite" à primeira vista, que
+  era o critério central do brief. "2010 Champions League Final opening ceremony.jpg" (final
+  Bayern-Inter 2010 no Bernabéu, CC BY 2.0) tinha tifos vistosos dos dois lados mas nenhuma presença
+  do Real Madrid — descartada por mismatch temático, mesmo sendo no próprio estádio.
