@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { nextMatch, lastResults } from './match'
 import { players } from './squad'
-import { eras } from './legacy'
+import { eras, founded, yearsOfHistory } from './legacy'
 import { trophies } from './trophies'
 import { headline, secondary } from './news'
 
@@ -16,8 +16,12 @@ describe('data snapshot', () => {
     expect(new Set(numbers).size).toBe(numbers.length)
     numbers.forEach((n) => expect(n).toBeGreaterThan(0))
   })
-  it('legacy: eras em ordem cronológica começando em 1902', () => {
-    expect(eras[0].year).toBe('1902')
+  it('legacy: fundação 1902 na abertura, 6-8 eras cronológicas a partir de 1956', () => {
+    expect(founded).toBe(1902)
+    expect(yearsOfHistory).toBe(124)
+    expect(eras[0].year).toBe('1956')
+    expect(eras.length).toBeGreaterThanOrEqual(6)
+    expect(eras.length).toBeLessThanOrEqual(8)
     const years = eras.map((e) => parseInt(e.year))
     for (let i = 1; i < years.length; i++) expect(years[i]).toBeGreaterThan(years[i - 1])
   })
