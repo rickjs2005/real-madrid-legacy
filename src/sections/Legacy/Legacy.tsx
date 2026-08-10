@@ -118,7 +118,7 @@ export default function Legacy() {
         >
           {/* sobreposição editorial: a era anterior espia por trás da moldura
               em alguns capítulos (spread de revista, não scrapbook) */}
-          {[1, 4, 7].includes(i) && (
+          {[1, 5, 6].includes(i) && (
             <div className="absolute right-[34vw] top-[15vh] h-[34vh] w-[13vw] overflow-hidden opacity-60">
               <img
                 src={`/assets/legacy/${eras[i - 1].year}.webp`}
