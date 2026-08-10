@@ -31,9 +31,9 @@ export default function Squad() {
         gsap.utils.toArray<HTMLElement>('[data-player-photo]').forEach((photo) => {
           gsap.fromTo(
             photo,
-            { xPercent: -7 },
+            { xPercent: -4 },
             {
-              xPercent: 7,
+              xPercent: 4,
               ease: 'none',
               scrollTrigger: {
                 trigger: photo,
@@ -123,23 +123,31 @@ export default function Squad() {
               </text>
             </svg>
             {/* sanduíche tipográfico: o nome atravessa POR TRÁS da foto (z abaixo
-                da foto), enquanto índice, posição e stats ficam na frente (z-20) */}
-            <h2 className="absolute left-[8vw] z-[1] font-display text-[10.5vw] leading-[0.9] whitespace-nowrap">
+                da foto) — corpo auto-ajustado ao comprimento do nome para que só
+                a cauda cruze a moldura (nome sempre legível) */}
+            <h2
+              className="absolute left-[8vw] z-[1] font-display leading-[0.9] whitespace-nowrap"
+              style={{ fontSize: `min(10.5vw, ${(68 / (0.58 * p.name.length)).toFixed(2)}vw)` }}
+            >
               {p.name}
             </h2>
-            <img
-              data-player-photo
-              src={`/assets/squad/p${p.index}.webp`}
-              alt={p.name}
-              onError={(e) => (e.currentTarget.style.display = 'none')}
-              className="absolute right-[10vw] bottom-0 z-10 h-[88vh] object-contain object-bottom
-                         [filter:grayscale(1)_sepia(0.22)_contrast(1.08)_brightness(1.02)]
-                         transition-[filter] duration-500 group-hover:[filter:none]"
-            />
-            {/* legenda-ficha da foto (mesma voz das molduras do Legacy) */}
-            <p className="absolute bottom-6 right-[10vw] z-20 text-[10px] tracking-[0.3em] opacity-50">
-              № {p.number} — {p.nationality.toUpperCase()}
-            </p>
+            {/* moldura padronizada (retrato, como no Legacy): consistência entre
+                slides independente do aspecto da foto original */}
+            <div className="absolute right-[8vw] bottom-[8vh] z-10 h-[74vh] w-[28vw] overflow-hidden">
+              <img
+                data-player-photo
+                src={`/assets/squad/p${p.index}.webp`}
+                alt={p.name}
+                onError={(e) => ((e.currentTarget.parentElement as HTMLElement).style.display = 'none')}
+                className="h-full w-full scale-110 object-cover
+                           [filter:grayscale(1)_sepia(0.22)_contrast(1.08)_brightness(1.02)]
+                           transition-[filter] duration-500 group-hover:[filter:none]"
+              />
+              <div className="pointer-events-none absolute inset-0 ring-1 ring-gold/30" />
+              <p className="absolute bottom-4 left-4 text-[10px] tracking-[0.3em] text-day/80 [text-shadow:0_1px_8px_rgba(5,7,15,0.8)]">
+                № {p.number} — {p.nationality.toUpperCase()}
+              </p>
+            </div>
             <div className="relative z-20 self-start mt-[16vh]">
               <p className="font-display text-[2vw] text-gold">{p.index}</p>
               <p className="mt-1 text-sm tracking-[0.4em] opacity-60">{p.position}</p>
