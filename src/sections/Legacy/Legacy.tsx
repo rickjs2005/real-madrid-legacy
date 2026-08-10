@@ -1,10 +1,13 @@
-import { useEffect, useRef } from 'react'
+import { Component, Suspense, lazy, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { eras, yearsOfHistory } from '../../data/legacy'
 import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
+
+const LegacyShaderFrame = lazy(() => import('./LegacyShaderFrame'))
 
 // Grain estático via SVG inline — custo de paint fixo, sem asset externo
 const GRAIN =
@@ -13,8 +16,45 @@ const GRAIN =
 // Tratamento de época: P&B, contraste alto, tom quente — dourado fica só nos acentos
 const ERA_FILTER = '[filter:grayscale(1)_contrast(1.15)_sepia(0.3)_brightness(0.88)]'
 
+const ERA_PHOTO_URLS = eras.map((e) => `/assets/legacy/${e.year}.webp`)
+
+// se o shader falhar, a moldura cai para a foto DOM da era atual (primeira)
+class FrameBoundary extends Component<{ children: ReactNode; fallback: ReactNode }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  componentDidCatch(error: Error) {
+    console.warn('[legacy] shader frame failed, falling back to static photo:', error.message)
+  }
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children
+  }
+}
+
 export default function Legacy() {
   const root = useRef<HTMLElement>(null)
+  // posição contínua na linha das eras (0..n-1); a parte fracionária é o
+  // progresso da transição de displacement no shader
+  const eraPos = useRef(0)
+  const [mountShader, setMountShader] = useState(false)
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const mountIo = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setMountShader(true),
+      { rootMargin: '100% 0px' },
+    )
+    const viewIo = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting))
+    if (root.current) {
+      mountIo.observe(root.current)
+      viewIo.observe(root.current)
+    }
+    return () => {
+      mountIo.disconnect()
+      viewIo.disconnect()
+    }
+  }, [])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -22,6 +62,7 @@ export default function Legacy() {
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         const slides = gsap.utils.toArray<HTMLElement>('[data-era]')
         const rail = gsap.utils.toArray<HTMLElement>('[data-rail]')
+        const captions = gsap.utils.toArray<HTMLElement>('[data-era-caption]')
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: root.current,
@@ -37,21 +78,29 @@ export default function Legacy() {
           // sobre fundo branco, estados sobrepostos viram texto fantasma legível
           tl.to(slides[i - 1], { opacity: 0, duration: 0.5 })
             .fromTo(slide, { opacity: 0 }, { opacity: 1, duration: 0.55 }, '>0.12')
-          const frame = slide.querySelector<HTMLElement>('[data-frame]')
-          if (frame) {
+          const lines = slide.querySelectorAll('[data-line]')
+          if (lines.length) tl.fromTo(lines, { y: 28, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.5 }, '<0.15')
+          const eraIdx = i - 1
+          if (i === 1) {
+            // primeira era: a moldura-shader se revela por clip-path
             tl.fromTo(
-              frame,
-              { clipPath: 'inset(0 0 100% 0)' },
+              '[data-shader-frame]',
+              { opacity: 1, clipPath: 'inset(0 0 100% 0)' },
               { clipPath: 'inset(0 0 0% 0)', duration: 0.8, ease: 'power2.out' },
               '<0.1',
             )
-            // a foto cresce lentamente enquanto a era está em cena
-            tl.fromTo(frame.querySelector('img'), { scale: 1.02 }, { scale: 1.14, duration: 1.8, ease: 'none' }, '<')
+          } else if (eraIdx < eras.length) {
+            // transição de displacement: a fração de eraPos dirige o shader
+            tl.to(eraPos, { current: eraIdx, duration: 0.7, ease: 'power1.inOut' }, '<')
+            // legenda acompanha a era
+            tl.to(captions[eraIdx - 1], { opacity: 0, duration: 0.25 }, '<')
+            tl.to(captions[eraIdx], { opacity: 1, duration: 0.25 }, '<0.3')
           }
-          const lines = slide.querySelectorAll('[data-line]')
-          if (lines.length) tl.fromTo(lines, { y: 28, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.1, duration: 0.5 }, '<0.15')
+          if (i === slides.length - 1) {
+            // desfecho: a moldura cede o palco
+            tl.to('[data-shader-frame]', { opacity: 0, duration: 0.4 }, '<')
+          }
           // trilho: destaca o ano da era atual
-          const eraIdx = i - 1
           if (eraIdx >= 0 && eraIdx < rail.length) {
             if (eraIdx > 0) tl.to(rail[eraIdx - 1], { opacity: 0.35, color: '#0a0a0a', duration: 0.3 }, '<')
             tl.to(rail[eraIdx], { opacity: 1, color: '#a5802f', duration: 0.3 }, '<')
@@ -94,6 +143,38 @@ export default function Legacy() {
         </ul>
       </div>
 
+      {/* moldura persistente: quad WebGL com transição de displacement entre as
+          fotos das eras — fica fora dos slides (só os textos crossfadam) */}
+      <div
+        data-shader-frame
+        className="absolute right-[10vw] top-1/2 z-[5] h-[72vh] w-[30vw] -translate-y-1/2 overflow-hidden opacity-0"
+      >
+        {mountShader && (
+          <FrameBoundary
+            fallback={
+              <img src={ERA_PHOTO_URLS[0]} alt="" className={`h-full w-full object-cover ${ERA_FILTER}`} />
+            }
+          >
+            <Suspense fallback={null}>
+              <LegacyShaderFrame eraPos={eraPos} urls={ERA_PHOTO_URLS} frameloop={inView ? 'always' : 'never'} />
+            </Suspense>
+          </FrameBoundary>
+        )}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(245,244,240,0.35))]" />
+        <div className="pointer-events-none absolute inset-0 opacity-20 mix-blend-overlay" style={{ backgroundImage: GRAIN }} />
+        <div className="pointer-events-none absolute inset-0 ring-1 ring-gold/30" />
+        {eras.map((era, i) => (
+          <p
+            key={era.year}
+            data-era-caption
+            className="absolute bottom-4 left-4 text-[10px] tracking-[0.3em] opacity-50"
+            style={{ opacity: i === 0 ? undefined : 0 }}
+          >
+            {era.year} — {era.place}
+          </p>
+        ))}
+      </div>
+
       <div data-era className="absolute inset-0 flex items-center justify-center">
         <img
           src="/assets/legacy/1902.webp"
@@ -113,7 +194,7 @@ export default function Legacy() {
         <div
           key={era.year}
           data-era
-          className="absolute inset-0 flex items-center justify-between pl-[12vw] pr-[10vw]"
+          className="absolute inset-0 flex items-center pl-[12vw] pr-[44vw]"
           style={{ opacity: 0 }}
         >
           {/* sobreposição editorial: a era anterior espia por trás da moldura
@@ -134,18 +215,6 @@ export default function Legacy() {
             <p data-line className="font-display text-[2.2vw] text-gold mt-2">{era.title}</p>
             <p data-line className="mt-4 max-w-md text-sm opacity-70">{era.text}</p>
             <p data-line className="mt-6 text-xs tracking-[0.4em] opacity-50">{era.stat}</p>
-          </div>
-          <div data-frame className="relative h-[72vh] w-[30vw] shrink-0 overflow-hidden">
-            <img
-              src={`/assets/legacy/${era.year}.webp`}
-              alt={era.title}
-              onError={(e) => ((e.currentTarget.parentElement as HTMLElement).style.display = 'none')}
-              className={`h-full w-full object-cover ${ERA_FILTER}`}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(245,244,240,0.35))]" />
-            <div className="pointer-events-none absolute inset-0 opacity-20 mix-blend-overlay" style={{ backgroundImage: GRAIN }} />
-            <div className="pointer-events-none absolute inset-0 ring-1 ring-gold/30" />
-            <p className="absolute bottom-4 left-4 text-[10px] tracking-[0.3em] opacity-50">{era.year} — {era.place}</p>
           </div>
         </div>
       ))}
