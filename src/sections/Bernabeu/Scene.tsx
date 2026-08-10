@@ -60,11 +60,48 @@ function makePitchTexture(): THREE.CanvasTexture {
   return t
 }
 
+// ——— Geometria do Bernabéu renovado ———
+// O estádio real é um retângulo arredondado envelopado em lâminas metálicas
+// horizontais, com telão 360° interno e cobertura plana — tudo construível
+// por extrusão de anéis de retângulo arredondado.
+
+function roundedRectContour<T extends THREE.Shape | THREE.Path>(hw: number, hd: number, r: number, target: T): T {
+  target.moveTo(-hw + r, -hd)
+  target.lineTo(hw - r, -hd)
+  target.absarc(hw - r, -hd + r, r, -Math.PI / 2, 0, false)
+  target.lineTo(hw, hd - r)
+  target.absarc(hw - r, hd - r, r, 0, Math.PI / 2, false)
+  target.lineTo(-hw + r, hd)
+  target.absarc(-hw + r, hd - r, r, Math.PI / 2, Math.PI, false)
+  target.lineTo(-hw, -hd + r)
+  target.absarc(-hw + r, -hd + r, r, Math.PI, Math.PI * 1.5, false)
+  return target
+}
+
+type RectSpec = [hw: number, hd: number, r: number]
+
+function makeRing(outer: RectSpec, inner: RectSpec, depth: number): THREE.ExtrudeGeometry {
+  const shape = roundedRectContour(outer[0], outer[1], outer[2], new THREE.Shape())
+  shape.holes.push(roundedRectContour(inner[0], inner[1], inner[2], new THREE.Path()))
+  const g = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: false, curveSegments: 20 })
+  g.rotateX(-Math.PI / 2) // extrusão vira altura (Y)
+  return g
+}
+
+// SDF de retângulo arredondado (negativo = dentro) — distribui torcida/cidade
+function sdRoundRect(x: number, z: number, hw: number, hd: number, r: number) {
+  const qx = Math.abs(x) - (hw - r)
+  const qz = Math.abs(z) - (hd - r)
+  const ax = Math.max(qx, 0)
+  const az = Math.max(qz, 0)
+  return Math.hypot(ax, az) + Math.min(Math.max(qx, qz), 0) - r
+}
+
 const CONE_SOURCES: [number, number, number][] = [
-  [-7.7, 4.4, -4.5],
-  [7.7, 4.4, -4.5],
-  [-7.7, 4.4, 4.5],
-  [7.7, 4.4, 4.5],
+  [-6.2, 4.6, -4.2],
+  [6.2, 4.6, -4.2],
+  [-6.2, 4.6, 4.2],
+  [6.2, 4.6, 4.2],
 ]
 
 // Cone alinhado do refletor (apex) ao ponto do gramado (base): a geometria do
@@ -91,7 +128,17 @@ function LightCone({ from, to }: { from: [number, number, number]; to: [number, 
 
 // Torcida como pontos de luz nas arquibancadas: escala humana no estádio.
 // ~4200 pontos estáticos (sem update por frame) — custo de GPU desprezível.
-function Crowd() {
+function Crowd({ progress }: { progress: MutableRefObject<number> }) {
+  const mat = useRef<THREE.PointsMaterial>(null)
+  useFrame(() => {
+    // de perto os pontos virariam quadrados sobre o gramado — a torcida
+    // desvanece quando a câmera desce ao nível do campo
+    if (mat.current) {
+      const p = progress.current
+      const fade = p < 0.72 ? 1 : Math.max(0, 1 - (p - 0.72) / 0.2)
+      mat.current.opacity = 0.95 * fade
+    }
+  })
   const { positions, colors } = useMemo(() => {
     const N = 4200
     const pos = new Float32Array(N * 3)
@@ -99,20 +146,25 @@ function Crowd() {
     const gold = new THREE.Color('#c9a24b')
     const dim = new THREE.Color('#39415a')
     const bright = new THREE.Color('#cdd5e8')
-    for (let i = 0; i < N; i++) {
-      const a = Math.random() * Math.PI * 2
-      const tier = Math.random() < 0.5 ? 0 : 1
-      const r = tier === 0 ? 5.4 + Math.random() * 1.6 : 6.5 + Math.random() * 1.8
-      const y = tier === 0 ? 0.5 + Math.random() * 0.9 : 1.6 + Math.random() * 1.1
-      pos[i * 3] = Math.cos(a) * r * 1.4
-      pos[i * 3 + 1] = y
-      pos[i * 3 + 2] = Math.sin(a) * r
+    let i = 0
+    while (i < N) {
+      // amostra na banda das arquibancadas do retângulo arredondado; a altura
+      // acompanha a profundidade na banda (quanto mais fundo, mais alto o anel)
+      const x = (Math.random() * 2 - 1) * 9.6
+      const z = (Math.random() * 2 - 1) * 7.0
+      const d = sdRoundRect(x, z, 9.4, 6.8, 2.5)
+      if (d > -0.3 || d < -3.4) continue
+      const t = (-d - 0.3) / 3.1
+      pos[i * 3] = x
+      pos[i * 3 + 1] = 0.35 + t * 2.6 + Math.random() * 0.15
+      pos[i * 3 + 2] = z
       const roll = Math.random()
       // raros flashes dourados/claros no meio da massa escura (celulares na arquibancada)
       const c = roll < 0.02 ? gold : roll < 0.06 ? bright : dim
       col[i * 3] = c.r
       col[i * 3 + 1] = c.g
       col[i * 3 + 2] = c.b
+      i++
     }
     return { positions: pos, colors: col }
   }, [])
@@ -122,7 +174,7 @@ function Crowd() {
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
         <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
-      <pointsMaterial size={0.05} vertexColors sizeAttenuation depthWrite={false} />
+      <pointsMaterial ref={mat} size={0.05} vertexColors sizeAttenuation depthWrite={false} transparent />
     </points>
   )
 }
@@ -140,7 +192,7 @@ function CityLights() {
       // snap em grade + jitter = quarteirões
       const x = (Math.floor(Math.random() * 44) - 22) * 1.5 + (Math.random() - 0.5) * 0.6
       const z = (Math.floor(Math.random() * 44) - 22) * 1.5 + (Math.random() - 0.5) * 0.6
-      if ((x / 1.4) ** 2 + z ** 2 < 12 ** 2) continue // fora do estádio
+      if (sdRoundRect(x, z, 11.5, 8.5, 3) < 1.2) continue // fora do estádio
       pos.push(x, 0.05, z)
       const c = Math.random() < 0.75 ? warm : cool
       col.push(c.r, c.g, c.b)
@@ -199,7 +251,7 @@ function LightSweep() {
   )
 }
 
-function Stadium() {
+function Stadium({ progress }: { progress: MutableRefObject<number> }) {
   const pitch = useMemo(makePitchTexture, [])
   // escala global: o bowl inteiro precisa caber no enquadramento aéreo
   // (fov 40 a ~30 de distância enxerga ~22 de altura; diâmetro bruto era 27)
@@ -215,41 +267,52 @@ function Stadium() {
         <planeGeometry args={[26, 20]} />
         <meshStandardMaterial color="#0a0d16" roughness={1} />
       </mesh>
-      {/* arquibancada inferior e superior (dois anéis) */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.9, 0]} scale={[1.4, 1, 0.55]}>
-        <torusGeometry args={[6.6, 1.9, 4, 64]} />
-        <meshStandardMaterial color="#131826" flatShading roughness={0.95} />
+      {/* arquibancadas: três anéis retangulares-arredondados em degrau */}
+      {(
+        [
+          [[7.6, 5.4, 1.8], [5.6, 3.7, 1.2], 1.1, 0],
+          [[8.6, 6.2, 2.2], [6.6, 4.6, 1.5], 1.2, 1.0],
+          [[9.6, 7.0, 2.6], [7.4, 5.2, 1.8], 1.3, 2.1],
+        ] as [RectSpec, RectSpec, number, number][]
+      ).map(([outer, inner, depth, y], k) => (
+        <mesh key={k} position={[0, y, 0]} geometry={makeRing(outer, inner, depth)}>
+          <meshStandardMaterial color="#161b29" roughness={0.95} />
+        </mesh>
+      ))}
+      {/* telão 360° — o anel de luz interno do Bernabéu renovado */}
+      <mesh position={[0, 3.35, 0]} geometry={makeRing([7.5, 5.3, 1.8], [7.3, 5.1, 1.7], 0.5)}>
+        <meshStandardMaterial color="#8fa8ff" emissive="#8fa8ff" emissiveIntensity={1.1} toneMapped={false} />
       </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 2.1, 0]} scale={[1.4, 1, 0.75]}>
-        <torusGeometry args={[7.6, 2.0, 4, 64]} />
-        <meshStandardMaterial color="#0f141f" flatShading roughness={0.95} />
-      </mesh>
-      {/* fachada envolvente — metal escovado refletindo o ambiente */}
-      <mesh position={[0, 2.9, 0]} scale={[1.4, 1, 1]}>
-        <cylinderGeometry args={[9.5, 9.8, 3.4, 64, 1, true]} />
-        <meshStandardMaterial color="#39404f" flatShading side={THREE.DoubleSide} roughness={0.35} metalness={0.75} />
-      </mesh>
-      {/* bandas de LED da fachada — douradas, o brilho da marca */}
-      {[2.2, 3.6].map((y) => (
-        <mesh key={y} rotation={[-Math.PI / 2, 0, 0]} position={[0, y, 0]} scale={[1.4, 1, 1]}>
-          <torusGeometry args={[9.66, 0.022, 8, 96]} />
+      {/* fachada: seis lâminas metálicas horizontais (a pele do estádio) */}
+      {Array.from({ length: 6 }).map((_, k) => (
+        <mesh
+          key={k}
+          position={[0, 0.35 + k * 0.72, 0]}
+          scale={1 + k * 0.008}
+          geometry={makeRing([10.4, 7.6, 2.9], [10.05, 7.25, 2.8], 0.55)}
+        >
+          <meshStandardMaterial color="#454c5e" metalness={0.8} roughness={0.3} />
+        </mesh>
+      ))}
+      {/* bandas de LED douradas entre as lâminas */}
+      {[1.78, 3.94].map((y) => (
+        <mesh key={y} position={[0, y, 0]} geometry={makeRing([10.46, 7.66, 2.9], [10.33, 7.53, 2.85], 0.07)}>
           <meshStandardMaterial color="#d9b25f" emissive="#d9b25f" emissiveIntensity={2.4} toneMapped={false} />
         </mesh>
       ))}
-      {/* anel de cobertura com linha de refletores */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 4.7, 0]} scale={[1.4, 1, 0.4]}>
-        <torusGeometry args={[8.6, 1.15, 4, 64]} />
-        <meshStandardMaterial color="#1a2030" flatShading roughness={0.8} />
+      {/* cobertura plana com abertura sobre o gramado */}
+      <mesh position={[0, 4.75, 0]} geometry={makeRing([11.0, 8.1, 3.1], [6.8, 4.7, 1.6], 0.28)}>
+        <meshStandardMaterial color="#3d4557" metalness={0.85} roughness={0.3} />
       </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 4.45, 0]} scale={[1.4, 1, 1]}>
-        <torusGeometry args={[7.5, 0.035, 8, 96]} />
+      {/* linha de refletores na borda interna da cobertura */}
+      <mesh position={[0, 4.6, 0]} geometry={makeRing([6.9, 4.8, 1.62], [6.75, 4.66, 1.58], 0.07)}>
         <meshStandardMaterial color="#e6c477" emissive="#e6c477" emissiveIntensity={2.8} toneMapped={false} />
       </mesh>
       {/* cones volumétricos dos refletores (apex na cobertura, base no gramado) */}
       {CONE_SOURCES.map((from, i) => (
         <LightCone key={i} from={from} to={[from[0] * 0.25, 0, from[2] * 0.25]} />
       ))}
-      <Crowd />
+      <Crowd progress={progress} />
       <CityLights />
       <Stars />
       <LightSweep />
@@ -265,13 +328,13 @@ function Stadium() {
 function Rig({ progress }: { progress: MutableRefObject<number> }) {
   useFrame(({ camera }) => {
     const p = progress.current
-    // aérea (alto/longe) → aproximação → nível do gramado
+    // aérea (alto/longe) → aproximação → dentro da abertura da cobertura
     camera.position.set(
-      Math.sin(p * Math.PI * 0.5) * 14 * (1 - p * 0.8),
-      22 - p * 20.5,
-      22 - p * 17.5, // termina em z=4.5: dentro do bowl (raio ~5.3 na escala 0.55)
+      Math.sin(p * Math.PI * 0.5) * 14 * (1 - p * 0.85),
+      22 - p * 20.3, // termina em y=1.7
+      22 - p * 19.6, // termina em z=2.4: dentro da abertura (meia-profundidade ~2.6)
     )
-    camera.lookAt(0, 1 - p, 0)
+    camera.lookAt(0, 0.8 - p * 0.5, 0)
   })
   return null
 }
@@ -291,7 +354,7 @@ export default function Scene({
       onCreated={({ gl }) => gl.setClearColor('#05070f')}
     >
       <StudioEnv />
-      <Stadium />
+      <Stadium progress={progress} />
       <Rig progress={progress} />
       <fog attach="fog" args={['#05070f', 20, 48]} />
       <EffectComposer>
