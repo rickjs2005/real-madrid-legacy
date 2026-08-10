@@ -71,6 +71,7 @@ export default function Matchday() {
       <SectionLabel n="01" title="MATCHDAY" />
 
       <div className="mt-[4vh]">
+        <p data-club-home className="font-display text-[1.6vw] text-gold mb-2">NEXT MATCH</p>
         <h2 data-club-home className="font-display text-[8vw] leading-[0.9]">
           {nextMatch.home}
         </h2>

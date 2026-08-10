@@ -1,37 +1,44 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { nextMatch } from '../../data/match'
+import { founded } from '../../data/legacy'
+import { trophies } from '../../data/trophies'
 import { initSmoothScroll } from '../../lib/lenis'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Abertura de filme, não landing page: um elemento principal (o nome do clube
-// em escala monumental), fotografia do Bernabéu sangrando a borda direita como
-// contraponto, e o resto em silêncio. Sem partículas, sem escudo decorativo.
+// Pôster cinematográfico: fotografia noturna do Bernabéu em viewport inteira,
+// tipografia monumental por cima, e SÓ identidade — nada de próximo jogo aqui
+// (futebol é papel do MATCHDAY). No scroll, o hero não termina: a foto cresce,
+// o texto se desloca e a seção se transforma na próxima.
 export default function Hero() {
   const root = useRef<HTMLElement>(null)
+  const europeanCups = trophies.find((t) => t.name === 'EUROPEAN CUPS')?.count ?? 15
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        gsap.timeline({ defaults: { ease: 'power4.out' } })
-          .fromTo('[data-photo]', { clipPath: 'inset(0 0 0 100%)' }, { clipPath: 'inset(0 0 0 0%)', duration: 1.4 }, 0.1)
-          .from('[data-line]', { yPercent: 110, stagger: 0.14, duration: 1.1 }, 0.35)
-          .from('[data-quiet]', { opacity: 0, duration: 0.9, ease: 'none' }, 1.1)
-        // saída: o hero cede o palco conforme o scroll começa (transição p/ Matchday)
-        gsap.to('[data-stage]', {
-          yPercent: -12,
-          opacity: 0.25,
-          ease: 'none',
-          scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: 0.4 },
+        // entrada: a foto respira, o nome sobe por máscaras, o resto em silêncio
+        gsap.timeline({ defaults: { ease: 'power3.out' } })
+          .fromTo('[data-hero-photo]', { scale: 1.1, opacity: 0.4 }, { scale: 1.04, opacity: 1, duration: 1.8, ease: 'power2.out' }, 0)
+          .from('[data-line]', { yPercent: 110, stagger: 0.14, duration: 1.1, ease: 'power4.out' }, 0.5)
+          .from('[data-quiet]', { opacity: 0, duration: 0.9, ease: 'none' }, 1.3)
+        // transformação: pin curto em que a foto avança e o texto cede o palco
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: root.current,
+            start: 'top top',
+            end: '+=90%',
+            pin: true,
+            scrub: 0.5,
+          },
         })
-        gsap.to('[data-photo]', {
-          yPercent: -18,
-          ease: 'none',
-          scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: 0.4 },
-        })
+          .to('[data-hero-photo]', { scale: 1.16, ease: 'none' }, 0)
+          .to('[data-hero-title]', { yPercent: -36, ease: 'none' }, 0)
+          .to('[data-hero-tag]', { opacity: 0, duration: 0.4 }, 0.1)
+          .to('[data-quiet]', { opacity: 0, duration: 0.35 }, 0.55)
+          .to('[data-hero-veil]', { opacity: 0.85, duration: 0.5 }, 0.4)
         gsap.to('[data-scrollcue-line]', {
           scaleY: 0.2,
           transformOrigin: 'top',
@@ -45,56 +52,49 @@ export default function Hero() {
     return () => ctx.revert()
   }, [])
 
-  const kickoff = new Date(nextMatch.dateISO)
-  const dateLabel = kickoff.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }).toUpperCase()
-
   return (
-    <section ref={root} id="hero" className="relative h-screen overflow-hidden">
-      <div
-        data-photo
-        className="absolute right-0 top-[8vh] h-[84vh] w-[36vw] overflow-hidden"
-        style={{ clipPath: 'inset(0 0 0 0%)' }}
-      >
+    <section ref={root} id="hero" className="relative h-screen overflow-hidden text-day">
+      <div data-hero-photo className="absolute inset-0">
         <img
-          src="/assets/bernabeu/aerial.webp"
-          alt="Santiago Bernabéu"
-          onError={(e) => ((e.currentTarget.parentElement as HTMLElement).style.display = 'none')}
-          className="h-full w-full object-cover object-center
-                     [filter:grayscale(1)_contrast(1.1)_brightness(1.05)]"
+          src="/assets/hero/stadium-night.webp"
+          alt="Santiago Bernabéu on a European night"
+          onError={(e) => (e.currentTarget.style.display = 'none')}
+          className="h-full w-full object-cover
+                     [filter:grayscale(0.35)_sepia(0.15)_contrast(1.12)_brightness(0.72)]"
         />
-        <div className="pointer-events-none absolute inset-0 bg-day/15" />
-        <p className="absolute bottom-4 left-4 text-[10px] tracking-[0.3em] text-ink/50">
-          SANTIAGO BERNABÉU — MADRID
-        </p>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(5,7,15,0.75))]" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/80 via-transparent to-night/40" />
       </div>
+      {/* véu que escurece a cena na transformação para o MATCHDAY */}
+      <div data-hero-veil className="pointer-events-none absolute inset-0 z-20 bg-night opacity-0" />
 
-      <div data-stage className="relative z-10 flex h-full flex-col justify-center pl-[8vw]">
+      <div data-hero-title className="relative z-10 flex h-full flex-col justify-center pl-[8vw]">
         <div className="overflow-hidden">
-          <h1 data-line className="font-display text-[12.5vw] leading-[0.88] tracking-tight">REAL</h1>
+          <h1 data-line className="font-display text-[13vw] leading-[0.86] tracking-tight">REAL</h1>
         </div>
         <div className="overflow-hidden">
-          <h1 data-line className="font-display text-[12.5vw] leading-[0.88] tracking-tight">MADRID</h1>
+          <h1 data-line className="font-display text-[13vw] leading-[0.86] tracking-tight">MADRID</h1>
         </div>
         <div className="overflow-hidden mt-5">
-          <p data-line className="font-display text-[2.6vw] text-gold">THE LEGACY NEVER STOPS.</p>
+          <p data-line data-hero-tag className="font-display text-[2.4vw] text-gold">THE LEGACY NEVER STOPS.</p>
         </div>
-        <p data-quiet className="mt-8 text-xs tracking-[0.35em] opacity-50">
-          NEXT — {nextMatch.home} · {dateLabel} · {nextMatch.venue.split(',')[0].toUpperCase()}
+      </div>
+
+      <div data-quiet className="absolute bottom-10 left-[8vw] z-10">
+        <p className="text-[10px] tracking-[0.4em] opacity-60">EST. {founded}</p>
+        <p className="font-display text-2xl mt-2">
+          <span className="text-gold">{europeanCups}</span> EUROPEAN CUPS
         </p>
       </div>
 
       <button
         data-quiet
         onClick={() => initSmoothScroll().scrollTo('#matchday')}
-        className="absolute bottom-10 left-[8vw] z-10 text-sm tracking-[0.3em] border-b border-ink pb-1 hover:text-gold hover:border-gold transition-colors"
+        className="absolute bottom-10 right-[4vw] z-10 flex flex-col items-center gap-3"
       >
-        NEXT MATCH →
+        <span className="text-[10px] tracking-[0.4em] opacity-60">SCROLL TO ENTER</span>
+        <span data-scrollcue-line className="block h-14 w-px bg-day/70" />
       </button>
-
-      <div data-quiet className="absolute bottom-10 right-[4vw] z-10 flex flex-col items-center gap-3">
-        <span className="text-[10px] tracking-[0.4em] opacity-50">SCROLL</span>
-        <span data-scrollcue-line className="block h-14 w-px bg-ink/60" />
-      </div>
     </section>
   )
 }
