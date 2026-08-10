@@ -58,7 +58,7 @@ export default function Trophies() {
           style={{ opacity: i === 0 ? 1 : 0 }}
         >
           <div>
-            <p data-count={t.count} className="font-display text-[24vw] leading-none text-gold">0</p>
+            <p data-count={t.count} className="font-display text-[24vw] leading-none text-gold">{t.count}</p>
             <p className="font-display text-[3vw]">{t.name}</p>
           </div>
           <img

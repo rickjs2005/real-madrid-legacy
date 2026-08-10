@@ -44,6 +44,10 @@ export default function Bernabeu() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
+        // opacidade inicial só é forçada aqui (dentro do guard de motion): com
+        // reduced-motion, a seção não roda a timeline e o subtítulo precisa
+        // ficar visível estaticamente em vez de sumir para sempre.
+        gsap.set('[data-bsub]', { opacity: 0 })
         gsap.timeline({
           scrollTrigger: {
             trigger: root.current,
@@ -82,7 +86,7 @@ export default function Bernabeu() {
         <p data-btitle className="font-display text-[8vw] leading-none text-center">
           SANTIAGO<br />BERNABÉU
         </p>
-        <p data-bsub className="mt-4 text-sm tracking-[0.4em] opacity-70" style={{ opacity: 0 }}>
+        <p data-bsub className="mt-4 text-sm tracking-[0.4em] opacity-70">
           05 — THE HOME OF LEGENDS
         </p>
       </div>

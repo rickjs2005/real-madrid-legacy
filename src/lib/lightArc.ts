@@ -121,7 +121,16 @@ function measureStops(self: ScrollTrigger): ArcStop[] {
   for (const { id, color } of SECTION_ANCHORS) {
     const el = document.getElementById(id)
     if (!el) continue
-    anchors.push({ color, top: el.getBoundingClientRect().top + scrollY })
+    // Squad/Legacy/Trophies/Bernabéu são pinadas: o GSAP tira o elemento do
+    // fluxo normal e o translada com transform durante o pin, então quando um
+    // ScrollTrigger.refresh() dispara NO MEIO do scroll (resize, window.load
+    // tardio), rect.top do próprio elemento reflete a posição pinada/traduzida
+    // do instante, não a posição real dele no documento — corrompendo o stop.
+    // O pin-spacer que o GSAP injeta como parent, porém, sempre fica plantado
+    // na posição documento correta (é ele que tem a altura do scroll pinado),
+    // então medir o spacer é imune a isso.
+    const box = el.parentElement?.classList.contains('pin-spacer') ? el.parentElement : el
+    anchors.push({ color, top: box.getBoundingClientRect().top + scrollY })
   }
   return deriveStops(anchors, self.start, self.end)
 }
