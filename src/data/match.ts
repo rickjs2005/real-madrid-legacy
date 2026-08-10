@@ -36,6 +36,14 @@ export const nextMatch = {
   competition: 'TROFEO TERESA HERRERA · PRE-SEASON FRIENDLY',
 }
 
+// Semântica do campo `score`: sempre "Real Madrid–adversário", independente
+// de `home`. Ex.: FERENCVÁROS score '2–1' significa RM 2, Ferencváros 1
+// (RM venceu), batendo com a fonte real "Ferencváros 1-2 Real Madrid".
+// Quem renderiza o placar decide a ordem de exibição (label esquerda/direita)
+// e deve reordenar os dígitos quando `home` for false, já que nesse caso o
+// adversário aparece à esquerda — não pode simplesmente concatenar
+// `${score}` entre os dois labels sem inverter, ou o placar fica invertido
+// na leitura visual.
 export const lastResults = [
   { opponent: 'FERENCVÁROS', score: '2–1', home: false },
   { opponent: 'FIORENTINA', score: '2–2', home: false },

@@ -6,6 +6,16 @@ import { countdownParts } from '../../lib/countdown'
 
 gsap.registerPlugin(ScrollTrigger)
 
+// `score` is always stored "Real Madrid–opponent" (see src/data/match.ts).
+// Labels render RMA on the side matching `home`, so when RM is away/neutral
+// (home: false) the opponent sits on the left — the score digits must flip
+// to "opponent–Real Madrid" to keep matching the label order left-to-right.
+function displayScore(score: string, home: boolean) {
+  if (home) return score
+  const [rm, opponent] = score.split('–')
+  return `${opponent}–${rm}`
+}
+
 export default function Matchday() {
   const root = useRef<HTMLElement>(null)
   const [now, setNow] = useState(() => new Date())
@@ -74,7 +84,7 @@ export default function Matchday() {
           <p className="text-xs tracking-[0.3em] opacity-50">LAST RESULTS</p>
           {lastResults.map((r) => (
             <p key={r.opponent} className="mt-2 font-display text-xl">
-              {r.home ? 'RMA' : r.opponent.slice(0, 3).toUpperCase()} {r.score}{' '}
+              {r.home ? 'RMA' : r.opponent.slice(0, 3).toUpperCase()} {displayScore(r.score, r.home)}{' '}
               {r.home ? r.opponent.slice(0, 3).toUpperCase() : 'RMA'}
             </p>
           ))}
