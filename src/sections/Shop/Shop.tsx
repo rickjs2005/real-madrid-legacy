@@ -72,7 +72,7 @@ export default function Shop() {
           <div
             key={item.n}
             data-row
-            className="group flex items-baseline justify-between border-t border-current/15 py-6 transition-transform duration-300 hover:translate-x-3 cursor-pointer"
+            className="group flex items-baseline justify-between border-t border-gold/30 py-6 transition-transform duration-300 hover:translate-x-3 cursor-pointer"
           >
             <div className="flex items-baseline gap-8">
               <span className="font-display text-sm text-gold">{item.n}</span>
@@ -83,7 +83,7 @@ export default function Shop() {
             <span className="text-xs tracking-[0.2em] opacity-50">{item.note}</span>
           </div>
         ))}
-        <div className="border-t border-current/15" />
+        <div className="border-t border-gold/30" />
       </div>
     </section>
   )

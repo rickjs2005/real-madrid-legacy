@@ -62,17 +62,17 @@ export default function Trophies() {
   }, [])
 
   return (
-    <section ref={root} id="trophies" className="relative h-screen overflow-hidden text-day">
+    <section ref={root} id="trophies" className="relative h-screen overflow-hidden">
       <div className="absolute inset-0 overflow-hidden">
         <img
           data-room
           src="/assets/trophies/room.webp"
           alt="Real Madrid trophy room"
           onError={(e) => (e.currentTarget.style.display = 'none')}
-          className="h-full w-full object-cover opacity-35
-                     [filter:grayscale(0.8)_sepia(0.35)_contrast(1.1)_brightness(0.55)]"
+          className="h-full w-full object-cover opacity-30
+                     [filter:grayscale(0.85)_sepia(0.3)_contrast(1.05)_brightness(1.15)]"
         />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(5,7,15,0.9))]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(245,244,240,0.92))]" />
       </div>
       <SectionLabel n="04" title="TROPHIES" className="absolute top-[8vh] left-[8vw] z-10" />
       {trophies.map((t, i) => (
@@ -83,7 +83,7 @@ export default function Trophies() {
           style={{ opacity: i === 0 ? 1 : 0 }}
         >
           <div>
-            <p data-count={t.count} className="font-display text-[24vw] leading-none text-gold drop-shadow-[0_0_60px_rgba(201,162,75,0.35)]">
+            <p data-count={t.count} className="font-display text-[24vw] leading-none text-gold">
               {t.count}
             </p>
             <p className="font-display text-[3vw]">{t.name}</p>

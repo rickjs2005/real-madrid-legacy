@@ -26,7 +26,7 @@ export default function Latest() {
   return (
     <section ref={root} id="latest" className="min-h-screen py-[14vh] px-[8vw]">
       <SectionLabel n="06" title="LATEST" />
-      <article data-news className="mt-[6vh] border-b border-current/15 pb-10">
+      <article data-news className="mt-[6vh] border-b border-gold/30 pb-10">
         <p className="text-xs tracking-[0.3em] text-gold">{headline.tag}</p>
         <h2 className="font-display text-[4.5vw] leading-tight mt-3 max-w-[70vw]">{headline.title}</h2>
       </article>

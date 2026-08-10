@@ -13,24 +13,18 @@ export interface ArcStop {
   color: string
 }
 
-// Arco de luz: dia → entardecer → noite → amanhecer → dia (ver spec, "Arco de luz").
-// Squad/Legacy/Trophies/Bernabéu usam text-day (texto claro) e não têm bg própria —
-// dependem do html mudar de cor atrás delas pra ter contraste. Os stops abaixo são
-// só o fallback estático (usado antes do 1º refresh do ScrollTrigger, ou em teste);
-// em runtime, mountLightArc() substitui isso pelas frações REAIS medidas a partir da
+// Direção "Los Blancos": o site inteiro é branco monumental; a noite existe UMA
+// vez — o mergulho no Bernabéu (estádio 3D aceso + Juanito) — e volta ao branco.
+// Os stops abaixo são só o fallback estático (antes do 1º refresh, ou em teste);
+// em runtime, mountLightArc() substitui pelas frações REAIS medidas a partir da
 // posição de cada seção no documento (ver measureStops/deriveStops), porque os
-// pin-spacers de Squad/Trophies/Legacy/Bernabéu esticam a página e frações "chutadas"
-// não acompanham isso — foi exatamente esse descompasso que deixava Squad com texto
-// claro sobre fundo claro.
+// pin-spacers esticam a página e frações "chutadas" não acompanham isso.
 export const PHASES: ArcStop[] = [
-  { at: 0, color: DAY }, // hero
-  { at: 0.03, color: DAY }, // matchday ainda dia
-  { at: 0.14, color: DUSK }, // squad — já escuro na entrada (texto claro)
-  { at: 0.46, color: NIGHT }, // legacy — noite
-  { at: 0.81, color: NIGHT }, // bernabeu — mantém noite (legacy→trophies→bernabeu não oscila)
-  { at: 0.93, color: DAWN }, // latest — amanhecer
-  { at: 0.96, color: DAY }, // shop
-  { at: 1, color: DAY }, // madridista/footer
+  { at: 0, color: DAY }, // hero → tudo branco até o estádio
+  { at: 0.72, color: DAY }, // trophies ainda branco
+  { at: 0.8, color: NIGHT }, // bernabeu — o único mergulho noturno
+  { at: 0.9, color: DAY }, // latest — de volta ao branco
+  { at: 1, color: DAY }, // shop/madridista/footer
 ]
 
 // gsap.utils.interpolate entre cores retorna "rgba(r,g,b,a)"; normalizamos para hex.
@@ -101,12 +95,9 @@ export function deriveStops(anchors: AnchorMeasurement[], start: number, end: nu
 // b e c), nunca dentro da seção que precisa do contraste já resolvido.
 const SECTION_ANCHORS: { id: string; color: string }[] = [
   { id: 'hero', color: DAY },
-  { id: 'matchday', color: DAY },
-  { id: 'squad', color: DUSK },
-  { id: 'legacy', color: NIGHT },
-  { id: 'bernabeu', color: NIGHT },
-  { id: 'latest', color: DAWN },
-  { id: 'shop', color: DAY },
+  { id: 'trophies', color: DAY }, // segura o branco até a porta do estádio
+  { id: 'bernabeu', color: NIGHT }, // o único mergulho noturno
+  { id: 'latest', color: DAY }, // saiu do estádio: branco de novo
   { id: 'madridista', color: DAY },
 ]
 

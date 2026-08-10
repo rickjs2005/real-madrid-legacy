@@ -2,17 +2,16 @@ import { describe, it, expect } from 'vitest'
 import { arcColor, deriveStops, PHASES } from './lightArc'
 
 describe('arcColor', () => {
-  it('começa no dia e termina no dia', () => {
+  it('começa no branco e termina no branco (Los Blancos)', () => {
     expect(arcColor(0).toLowerCase()).toBe('#f5f4f0')
     expect(arcColor(1).toLowerCase()).toBe('#f5f4f0')
   })
-  it('está na noite no meio do arco (fase Trophies/Bernabéu)', () => {
-    expect(arcColor(0.55).toLowerCase()).toBe('#05070f')
+  it('mergulha na noite apenas na fase do Bernabéu', () => {
+    expect(arcColor(0.8).toLowerCase()).toBe('#05070f')
   })
-  it('interpola entre fases (nem dia nem noite)', () => {
-    const mid = arcColor(0.3).toLowerCase()
-    expect(mid).not.toBe('#f5f4f0')
-    expect(mid).not.toBe('#05070f')
+  it('permanece branco antes do estádio (sem escurecer no meio do site)', () => {
+    expect(arcColor(0.3).toLowerCase()).toBe('#f5f4f0')
+    expect(arcColor(0.6).toLowerCase()).toBe('#f5f4f0')
   })
   it('fases cobrem 0..1 em ordem', () => {
     expect(PHASES[0].at).toBe(0)
@@ -33,59 +32,40 @@ describe('arcColor', () => {
   })
 })
 
-// deriveStops é a peça que corrige o bug real: transforma posições medidas de seção
-// (que já embutem os pin-spacers de Squad/Legacy/Trophies/Bernabéu) em stops 0..1,
-// em vez de frações "chutadas" que não acompanhavam o layout pinado.
+// deriveStops transforma posições medidas de seção (que já embutem os
+// pin-spacers) em stops 0..1 — a peça que mantém o mergulho noturno ancorado
+// no Bernabéu REAL, não numa fração chutada.
 describe('deriveStops', () => {
+  const anchors = [
+    { color: '#f5f4f0', top: 0 }, // hero
+    { color: '#f5f4f0', top: 7200 }, // trophies (segura o branco)
+    { color: '#05070f', top: 8130 }, // bernabeu — único mergulho
+    { color: '#f5f4f0', top: 9300 }, // latest — branco de novo
+    { color: '#f5f4f0', top: 9920 }, // madridista
+  ]
+
   it('normaliza posições reais de seção (com pin-spacers) em frações 0..1', () => {
-    // números na mesma proporção do que foi medido ao vivo (squad ~13.5% do scroll,
-    // legacy ~46%, bernabeu ~81%, latest ~93%, shop ~96%) — não são um "chute".
-    const anchors = [
-      { color: '#f5f4f0', top: 0 }, // hero
-      { color: '#f5f4f0', top: 300 }, // matchday
-      { color: '#2a2d3a', top: 1350 }, // squad
-      { color: '#05070f', top: 4640 }, // legacy
-      { color: '#05070f', top: 8130 }, // bernabeu
-      { color: '#8a8676', top: 9300 }, // latest
-      { color: '#f5f4f0', top: 9610 }, // shop
-      { color: '#f5f4f0', top: 9920 }, // madridista
-    ]
     const stops = deriveStops(anchors, 0, 10000)
     expect(stops[0].at).toBe(0)
     expect(stops[stops.length - 1].at).toBe(1)
     for (let i = 1; i < stops.length; i++) expect(stops[i].at).toBeGreaterThan(stops[i - 1].at)
   })
 
-  it('regressão: no início real do Squad, o fundo já está escuro (não mais dia sob texto claro)', () => {
-    const anchors = [
-      { color: '#f5f4f0', top: 0 },
-      { color: '#f5f4f0', top: 300 },
-      { color: '#2a2d3a', top: 1350 },
-      { color: '#05070f', top: 4640 },
-      { color: '#05070f', top: 8130 },
-      { color: '#8a8676', top: 9300 },
-      { color: '#f5f4f0', top: 9610 },
-      { color: '#f5f4f0', top: 9920 },
-    ]
+  it('está em noite exata na âncora do Bernabéu', () => {
     const stops = deriveStops(anchors, 0, 10000)
-    // fração real de início do Squad medida ao vivo: ~0.135
-    expect(arcColor(0.135, stops).toLowerCase()).not.toBe('#f5f4f0')
+    expect(arcColor(0.813, stops).toLowerCase()).toBe('#05070f')
   })
 
-  it('mantém noite constante ao longo de legacy→trophies→bernabeu (sem drift no meio das seções escuras)', () => {
-    const anchors = [
-      { color: '#f5f4f0', top: 0 },
-      { color: '#f5f4f0', top: 300 },
-      { color: '#2a2d3a', top: 1350 },
-      { color: '#05070f', top: 4640 }, // legacy
-      { color: '#05070f', top: 8130 }, // bernabeu
-      { color: '#8a8676', top: 9300 },
-      { color: '#f5f4f0', top: 9610 },
-      { color: '#f5f4f0', top: 9920 },
-    ]
+  it('regressão: permanece branco puro até a âncora do Trophies (nada de escurecer no meio)', () => {
     const stops = deriveStops(anchors, 0, 10000)
-    // ponto no meio de legacy/trophies (entre as âncoras legacy e bernabeu): ainda noite exata
-    expect(arcColor(0.6, stops).toLowerCase()).toBe('#05070f')
+    expect(arcColor(0.135, stops).toLowerCase()).toBe('#f5f4f0')
+    expect(arcColor(0.5, stops).toLowerCase()).toBe('#f5f4f0')
+    expect(arcColor(0.72, stops).toLowerCase()).toBe('#f5f4f0')
+  })
+
+  it('volta ao branco depois do estádio', () => {
+    const stops = deriveStops(anchors, 0, 10000)
+    expect(arcColor(0.95, stops).toLowerCase()).toBe('#f5f4f0')
   })
 
   it('cai pro PHASES padrão com range degenerado ou nenhuma âncora medida', () => {
@@ -94,14 +74,14 @@ describe('deriveStops', () => {
   })
 
   it('descarta âncoras empatadas/fora de ordem pra nunca dividir por zero', () => {
-    const anchors = [
+    const tied = [
       { color: '#111111', top: 0 },
       { color: '#222222', top: 50 },
       { color: '#222222', top: 50 },
       { color: '#333333', top: 100 },
     ]
-    const stops = deriveStops(anchors, 0, 100)
-    expect(stops.length).toBeLessThan(anchors.length)
+    const stops = deriveStops(tied, 0, 100)
+    expect(stops.length).toBeLessThan(tied.length)
     for (let i = 1; i < stops.length; i++) expect(stops[i].at).toBeGreaterThan(stops[i - 1].at)
   })
 })

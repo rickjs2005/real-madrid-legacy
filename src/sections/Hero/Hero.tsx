@@ -7,10 +7,10 @@ import { initSmoothScroll } from '../../lib/lenis'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Pôster cinematográfico: fotografia noturna do Bernabéu em viewport inteira,
-// tipografia monumental por cima, e SÓ identidade — nada de próximo jogo aqui
-// (futebol é papel do MATCHDAY). No scroll, o hero não termina: a foto cresce,
-// o texto se desloca e a seção se transforma na próxima.
+// Los Blancos: pôster branco monumental. O nome do clube em tinta sobre branco,
+// a fotografia da noite europeia como faixa editorial entre listras douradas, e
+// o nome atravessando POR CIMA da faixa (sanduíche). No scroll, a faixa cresce
+// e escurece — um gostinho da noite que só volta inteira no Bernabéu.
 export default function Hero() {
   const root = useRef<HTMLElement>(null)
   const europeanCups = trophies.find((t) => t.name === 'EUROPEAN CUPS')?.count ?? 15
@@ -19,26 +19,24 @@ export default function Hero() {
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        // entrada: a foto respira, o nome sobe por máscaras, o resto em silêncio
-        gsap.timeline({ defaults: { ease: 'power3.out' } })
-          .fromTo('[data-hero-photo]', { scale: 1.1, opacity: 0.4 }, { scale: 1.04, opacity: 1, duration: 1.8, ease: 'power2.out' }, 0)
-          .from('[data-line]', { yPercent: 110, stagger: 0.14, duration: 1.1, ease: 'power4.out' }, 0.5)
-          .from('[data-quiet]', { opacity: 0, duration: 0.9, ease: 'none' }, 1.3)
-        // transformação: pin curto em que a foto avança e o texto cede o palco
+        gsap.timeline({ defaults: { ease: 'power4.out' } })
+          .fromTo('[data-hero-band]', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 1.5, ease: 'power2.inOut' }, 0.1)
+          .from('[data-line]', { yPercent: 110, stagger: 0.14, duration: 1.1 }, 0.5)
+          .from('[data-quiet]', { opacity: 0, duration: 0.9, ease: 'none' }, 1.4)
+        // transformação: a faixa avança e o texto cede — prenúncio da noite
         gsap.timeline({
           scrollTrigger: {
             trigger: root.current,
             start: 'top top',
-            end: '+=90%',
+            end: '+=80%',
             pin: true,
             scrub: 0.5,
           },
         })
-          .to('[data-hero-photo]', { scale: 1.16, ease: 'none' }, 0)
-          .to('[data-hero-title]', { yPercent: -36, ease: 'none' }, 0)
+          .to('[data-hero-band] img', { scale: 1.18, ease: 'none' }, 0)
+          .to('[data-hero-title]', { yPercent: -30, ease: 'none' }, 0)
           .to('[data-hero-tag]', { opacity: 0, duration: 0.4 }, 0.1)
-          .to('[data-quiet]', { opacity: 0, duration: 0.35 }, 0.55)
-          .to('[data-hero-veil]', { opacity: 0.85, duration: 0.5 }, 0.4)
+          .to('[data-quiet]', { opacity: 0, duration: 0.35 }, 0.5)
         gsap.to('[data-scrollcue-line]', {
           scaleY: 0.2,
           transformOrigin: 'top',
@@ -53,20 +51,18 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={root} id="hero" className="relative h-screen overflow-hidden bg-night text-day">
-      <div data-hero-photo className="absolute inset-0">
+    <section ref={root} id="hero" className="relative h-screen overflow-hidden bg-day">
+      {/* faixa fotográfica editorial entre listras douradas */}
+      <div data-hero-band className="absolute left-0 right-0 top-[24vh] z-0 h-[46vh] overflow-hidden border-y border-gold/50">
         <img
           src="/assets/hero/stadium-night.webp"
           alt="Santiago Bernabéu on a European night"
           onError={(e) => (e.currentTarget.style.display = 'none')}
-          className="h-full w-full object-cover
-                     [filter:grayscale(0.35)_sepia(0.15)_contrast(1.12)_brightness(0.72)]"
+          className="h-full w-full object-cover object-center
+                     [filter:grayscale(0.85)_sepia(0.2)_contrast(1.1)_brightness(0.9)]"
         />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(5,7,15,0.75))]" />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-night/80 via-transparent to-night/40" />
+        <div className="pointer-events-none absolute inset-0 bg-day/10" />
       </div>
-      {/* véu que escurece a cena na transformação para o MATCHDAY */}
-      <div data-hero-veil className="pointer-events-none absolute inset-0 z-20 bg-night opacity-0" />
 
       <div data-hero-title className="relative z-10 flex h-full flex-col justify-center pl-[8vw]">
         <div className="overflow-hidden">
@@ -93,7 +89,7 @@ export default function Hero() {
         className="absolute bottom-10 right-[4vw] z-10 flex flex-col items-center gap-3"
       >
         <span className="text-[10px] tracking-[0.4em] opacity-60">SCROLL TO ENTER</span>
-        <span data-scrollcue-line className="block h-14 w-px bg-day/70" />
+        <span data-scrollcue-line className="block h-14 w-px bg-gold" />
       </button>
     </section>
   )

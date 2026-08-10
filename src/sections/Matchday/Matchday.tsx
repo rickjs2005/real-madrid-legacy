@@ -90,7 +90,7 @@ export default function Matchday() {
         </p>
       </div>
 
-      <div data-lowerthird className="border-t border-current/15 pt-6">
+      <div data-lowerthird className="border-t border-gold/40 pt-6">
         <div className="flex items-baseline justify-between gap-8 text-sm">
           <p>
             <span className="text-xs tracking-[0.3em] opacity-50 mr-3">KICK-OFF</span>

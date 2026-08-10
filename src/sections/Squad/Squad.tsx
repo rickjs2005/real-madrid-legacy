@@ -51,7 +51,7 @@ export default function Squad() {
   }, [])
 
   return (
-    <section ref={root} id="squad" className="relative overflow-hidden text-day">
+    <section ref={root} id="squad" className="relative overflow-hidden">
       <SectionLabel n="02" title="THE SQUAD" className="absolute top-[8vh] left-[8vw] z-10" />
       <div data-track className="flex h-screen w-max">
         {players.map((p) => (
@@ -67,14 +67,14 @@ export default function Squad() {
               alt={p.name}
               onError={(e) => (e.currentTarget.style.display = 'none')}
               className="absolute right-[10vw] bottom-0 z-10 h-[88vh] object-contain object-bottom
-                         [filter:grayscale(1)_sepia(0.3)_hue-rotate(190deg)_saturate(2)_brightness(0.8)]
+                         [filter:grayscale(1)_sepia(0.22)_contrast(1.08)_brightness(1.02)]
                          transition-[filter] duration-500 group-hover:[filter:none]"
             />
             <div className="relative z-20 self-start mt-[16vh]">
               <p className="font-display text-[2vw] text-gold">{p.index}</p>
               <p className="mt-1 text-sm tracking-[0.4em] opacity-60">{p.position}</p>
               <div className="mt-[38vh] max-w-xs opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
-                <div className="flex gap-10 border-t border-day/20 pt-4">
+                <div className="flex gap-10 border-t border-gold/40 pt-4">
                   <div>
                     <p className="text-xs tracking-[0.3em] opacity-50">NUMBER</p>
                     <p className="font-display text-4xl text-gold">{p.number}</p>
@@ -90,7 +90,7 @@ export default function Squad() {
                     </div>
                   ))}
                 </div>
-                <p className="mt-6 text-sm tracking-[0.3em] border-b border-day/40 pb-1 inline-block">VIEW PLAYER →</p>
+                <p className="mt-6 text-sm tracking-[0.3em] border-b border-gold/60 pb-1 inline-block">VIEW PLAYER →</p>
               </div>
             </div>
           </article>

@@ -77,11 +77,11 @@ export default function Legacy() {
   }, [])
 
   return (
-    <section ref={root} id="legacy" className="relative h-screen overflow-hidden text-day">
+    <section ref={root} id="legacy" className="relative h-screen overflow-hidden">
       <SectionLabel n="03" title="THE LEGACY" className="absolute top-[8vh] left-[8vw] z-10" />
 
       <div className="absolute left-[4vw] top-1/2 z-10 -translate-y-1/2">
-        <div className="absolute -left-3 top-0 h-full w-px bg-day/15" />
+        <div className="absolute -left-3 top-0 h-full w-px bg-ink/15" />
         <div data-rail-line className="absolute -left-3 top-0 h-full w-px bg-gold" style={{ transform: 'scaleY(0)' }} />
         <ul className="flex flex-col gap-5">
           {eras.map((e) => (
@@ -97,9 +97,9 @@ export default function Legacy() {
           src="/assets/legacy/1902.webp"
           alt=""
           onError={(e) => (e.currentTarget.style.display = 'none')}
-          className={`absolute inset-0 h-full w-full object-cover opacity-15 ${ERA_FILTER}`}
+          className={`absolute inset-0 h-full w-full object-cover opacity-20 ${ERA_FILTER}`}
         />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,7,15,0.85))]" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(245,244,240,0.92))]" />
         <div className="relative text-center">
           <p className="text-xs tracking-[0.4em] opacity-50">FOUNDED 1902</p>
           <p className="font-display text-[9vw] leading-none mt-4">{yearsOfHistory} YEARS</p>
@@ -124,7 +124,7 @@ export default function Legacy() {
                 onError={(e) => ((e.currentTarget.parentElement as HTMLElement).style.display = 'none')}
                 className={`h-full w-full object-cover ${ERA_FILTER} brightness-[0.6]`}
               />
-              <div className="pointer-events-none absolute inset-0 ring-1 ring-day/10" />
+              <div className="pointer-events-none absolute inset-0 ring-1 ring-gold/25" />
             </div>
           )}
           <div className="max-w-[42vw]">
@@ -140,9 +140,9 @@ export default function Legacy() {
               onError={(e) => ((e.currentTarget.parentElement as HTMLElement).style.display = 'none')}
               className={`h-full w-full object-cover ${ERA_FILTER}`}
             />
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(5,7,15,0.6))]" />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(245,244,240,0.35))]" />
             <div className="pointer-events-none absolute inset-0 opacity-20 mix-blend-overlay" style={{ backgroundImage: GRAIN }} />
-            <div className="pointer-events-none absolute inset-0 ring-1 ring-day/15" />
+            <div className="pointer-events-none absolute inset-0 ring-1 ring-gold/30" />
             <p className="absolute bottom-4 left-4 text-[10px] tracking-[0.3em] opacity-50">{era.year} — {era.place}</p>
           </div>
         </div>

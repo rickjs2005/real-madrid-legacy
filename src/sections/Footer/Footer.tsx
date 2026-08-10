@@ -28,7 +28,7 @@ function resolveScrollTarget(selector: string): string | number {
 export default function Footer() {
   return (
     <footer className="px-[8vw] pb-10 pt-[10vh]">
-      <div className="flex items-start justify-between border-t border-current/15 pt-10">
+      <div className="flex items-start justify-between border-t border-gold/40 pt-10">
         <p className="font-display text-3xl">REAL MADRID</p>
         <nav className="grid grid-cols-3 gap-x-16 gap-y-3">
           {LINKS.map((l) => (

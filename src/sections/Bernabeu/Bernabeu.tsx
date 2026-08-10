@@ -22,11 +22,11 @@ function FallbackImage() {
   return (
     <>
       <img
-        src="/assets/bernabeu/aerial.webp"
-        alt="Santiago Bernabéu"
+        src="/assets/hero/stadium-night.webp"
+        alt="Santiago Bernabéu on a European night"
         onError={(e) => (e.currentTarget.style.display = 'none')}
-        className="h-full w-full object-cover opacity-50
-                   [filter:grayscale(0.9)_sepia(0.25)_hue-rotate(180deg)_brightness(0.45)_contrast(1.15)]"
+        className="h-full w-full object-cover opacity-70
+                   [filter:grayscale(0.4)_sepia(0.15)_contrast(1.15)_brightness(0.6)]"
       />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(5,7,15,0.9))]" />
     </>
@@ -112,7 +112,7 @@ export default function Bernabeu() {
   }, [])
 
   return (
-    <section ref={root} id="bernabeu" className="relative h-screen overflow-hidden text-day">
+    <section ref={root} id="bernabeu" className="relative h-screen overflow-hidden bg-night text-day">
       <div className="absolute inset-0">
         {use3d && mount3d ? (
           <SceneBoundary>
