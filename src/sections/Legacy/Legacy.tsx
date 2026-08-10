@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { eras, yearsOfHistory } from '../../data/legacy'
+import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -77,7 +78,7 @@ export default function Legacy() {
 
   return (
     <section ref={root} id="legacy" className="relative h-screen overflow-hidden text-day">
-      <p className="absolute top-[8vh] left-[8vw] z-10 text-sm tracking-[0.4em] opacity-50">03 — THE LEGACY</p>
+      <SectionLabel n="03" title="THE LEGACY" className="absolute top-[8vh] left-[8vw] z-10" />
 
       <div className="absolute left-[4vw] top-1/2 z-10 -translate-y-1/2">
         <div className="absolute -left-3 top-0 h-full w-px bg-day/15" />

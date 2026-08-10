@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { players } from '../../data/squad'
+import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -31,7 +32,8 @@ export default function Squad() {
   }, [])
 
   return (
-    <section ref={root} id="squad" className="overflow-hidden text-day">
+    <section ref={root} id="squad" className="relative overflow-hidden text-day">
+      <SectionLabel n="02" title="THE SQUAD" className="absolute top-[8vh] left-[8vw] z-10" />
       <div data-track className="flex h-screen w-max">
         {players.map((p) => (
           <article key={p.index} className="group relative flex h-screen w-screen shrink-0 items-center px-[8vw]">

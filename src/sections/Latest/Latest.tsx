@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { headline, secondary } from '../../data/news'
+import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -24,7 +25,7 @@ export default function Latest() {
 
   return (
     <section ref={root} id="latest" className="min-h-screen py-[14vh] px-[8vw]">
-      <p className="text-sm tracking-[0.4em] opacity-50">06 — LATEST</p>
+      <SectionLabel n="06" title="LATEST" />
       <article data-news className="mt-[6vh] border-b border-current/15 pb-10">
         <p className="text-xs tracking-[0.3em] text-gold">{headline.tag}</p>
         <h2 className="font-display text-[4.5vw] leading-tight mt-3 max-w-[70vw]">{headline.title}</h2>

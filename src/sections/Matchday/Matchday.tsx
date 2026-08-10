@@ -3,19 +3,21 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { nextMatch, lastResults, leagueNote } from '../../data/match'
 import { countdownParts } from '../../lib/countdown'
+import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// `score` is always stored "Real Madrid–opponent" (see src/data/match.ts).
-// Labels render RMA on the side matching `home`, so when RM is away/neutral
-// (home: false) the opponent sits on the left — the score digits must flip
-// to "opponent–Real Madrid" to keep matching the label order left-to-right.
+// score é armazenado sempre RM-first (ver src/data/match.ts); em jogo fora,
+// os dígitos invertem para acompanhar a ordem visitante–mandante do label.
 function displayScore(score: string, home: boolean) {
   if (home) return score
   const [rm, opponent] = score.split('–')
   return `${opponent}–${rm}`
 }
 
+// Composição de evento/transmissão: os dois nomes em escala desigual
+// (assimetria editorial), o countdown como elemento dominante e os metadados
+// como "lower third" de broadcast — uma única linha na base.
 export default function Matchday() {
   const root = useRef<HTMLElement>(null)
   const [now, setNow] = useState(() => new Date())
@@ -27,19 +29,35 @@ export default function Matchday() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('[data-club]', {
-        scrollTrigger: { trigger: root.current, start: 'top 60%' },
-        xPercent: (i) => (i === 0 ? -40 : 40),
-        opacity: 0,
-        duration: 1,
-        ease: 'power3.out',
-      })
-      gsap.from('[data-meta]', {
-        scrollTrigger: { trigger: root.current, start: 'top 50%' },
-        y: 24,
-        opacity: 0,
-        stagger: 0.1,
-        duration: 0.8,
+      const mm = gsap.matchMedia()
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        gsap.from('[data-club-home]', {
+          scrollTrigger: { trigger: root.current, start: 'top 65%' },
+          xPercent: -18,
+          opacity: 0,
+          duration: 1.1,
+          ease: 'power3.out',
+        })
+        gsap.from('[data-club-away]', {
+          scrollTrigger: { trigger: root.current, start: 'top 65%' },
+          xPercent: 18,
+          opacity: 0,
+          duration: 1.1,
+          ease: 'power3.out',
+        })
+        gsap.from('[data-count]', {
+          scrollTrigger: { trigger: root.current, start: 'top 55%' },
+          scale: 1.08,
+          opacity: 0,
+          duration: 1,
+          ease: 'power2.out',
+        })
+        gsap.from('[data-lowerthird]', {
+          scrollTrigger: { trigger: root.current, start: 'top 40%' },
+          y: 20,
+          opacity: 0,
+          duration: 0.8,
+        })
       })
     }, root)
     return () => ctx.revert()
@@ -49,47 +67,59 @@ export default function Matchday() {
   const kickoff = new Date(nextMatch.dateISO)
 
   return (
-    <section ref={root} id="matchday" className="min-h-screen py-[12vh] px-[8vw]">
-      <p className="text-sm tracking-[0.4em] opacity-50">01 — MATCHDAY</p>
-      <div className="mt-[8vh] flex items-center justify-between">
-        <h2 data-club className="font-display text-[6.5vw] leading-none">{nextMatch.home}</h2>
-        <span className="font-display text-[3vw] text-gold">VS</span>
-        <h2 data-club className="font-display text-[6.5vw] leading-none text-right">{nextMatch.away}</h2>
-      </div>
-      <div className="mt-[8vh] grid grid-cols-4 gap-8 border-t border-current/15 pt-8">
-        <div data-meta>
-          <p className="text-xs tracking-[0.3em] opacity-50">KICK-OFF</p>
-          <p className="font-display text-3xl mt-2">
-            {kickoff.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }).toUpperCase()} —{' '}
-            {kickoff.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
-          </p>
-        </div>
-        <div data-meta>
-          <p className="text-xs tracking-[0.3em] opacity-50">VENUE</p>
-          <p className="font-display text-2xl mt-2">{nextMatch.venue}</p>
-        </div>
-        <div data-meta>
-          <p className="text-xs tracking-[0.3em] opacity-50">COMPETITION</p>
-          <p className="font-display text-2xl mt-2">{nextMatch.competition}</p>
-        </div>
-        <div data-meta>
-          <p className="text-xs tracking-[0.3em] opacity-50">COUNTDOWN</p>
-          <p className="font-display text-3xl mt-2 text-gold">
-            {cd ? `${cd.days}D ${cd.hours}H ${cd.minutes}M` : 'MATCHDAY'}
-          </p>
+    <section ref={root} id="matchday" className="flex min-h-screen flex-col justify-between py-[10vh] px-[8vw]">
+      <SectionLabel n="01" title="MATCHDAY" />
+
+      <div className="mt-[4vh]">
+        <h2 data-club-home className="font-display text-[8vw] leading-[0.9]">
+          {nextMatch.home}
+        </h2>
+        <div className="flex items-baseline gap-[3vw]">
+          <span className="font-display text-[2.2vw] text-gold">VS</span>
+          <h2 data-club-away className="font-display text-[8vw] leading-[0.9]">
+            {nextMatch.away}
+          </h2>
         </div>
       </div>
-      <div className="mt-[6vh] flex items-end justify-between">
-        <div>
-          <p className="text-xs tracking-[0.3em] opacity-50">LAST RESULTS</p>
-          {lastResults.map((r) => (
-            <p key={r.opponent} className="mt-2 font-display text-xl">
-              {r.home ? 'RMA' : r.opponent.slice(0, 3).toUpperCase()} {displayScore(r.score, r.home)}{' '}
-              {r.home ? r.opponent.slice(0, 3).toUpperCase() : 'RMA'}
-            </p>
-          ))}
+
+      <div data-count className="self-center text-center">
+        <p className="text-xs tracking-[0.4em] opacity-50">KICK-OFF IN</p>
+        <p className="font-display text-[7vw] leading-none text-gold mt-2">
+          {cd ? `${cd.days}D ${cd.hours}H ${cd.minutes}M` : 'MATCHDAY'}
+        </p>
+      </div>
+
+      <div data-lowerthird className="border-t border-current/15 pt-6">
+        <div className="flex items-baseline justify-between gap-8 text-sm">
+          <p>
+            <span className="text-xs tracking-[0.3em] opacity-50 mr-3">KICK-OFF</span>
+            <span className="font-display text-xl">
+              {kickoff.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }).toUpperCase()} ·{' '}
+              {kickoff.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}
+            </span>
+          </p>
+          <p>
+            <span className="text-xs tracking-[0.3em] opacity-50 mr-3">VENUE</span>
+            <span className="font-display text-xl">{nextMatch.venue}</span>
+          </p>
+          <p>
+            <span className="text-xs tracking-[0.3em] opacity-50 mr-3">COMPETITION</span>
+            <span className="font-display text-xl">{nextMatch.competition}</span>
+          </p>
         </div>
-        <p className="text-sm tracking-[0.3em] opacity-50">{leagueNote}</p>
+        <div className="mt-4 flex items-baseline justify-between text-xs opacity-60">
+          <p className="tracking-[0.2em]">
+            LAST —{' '}
+            {lastResults
+              .map((r) =>
+                r.home
+                  ? `RMA ${displayScore(r.score, r.home)} ${r.opponent.slice(0, 3).toUpperCase()}`
+                  : `${r.opponent.slice(0, 3).toUpperCase()} ${displayScore(r.score, r.home)} RMA`,
+              )
+              .join(' · ')}
+          </p>
+          <p className="tracking-[0.3em]">{leagueNote}</p>
+        </div>
       </div>
     </section>
   )

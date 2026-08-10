@@ -89,7 +89,7 @@ export default function Bernabeu() {
         // opacidade inicial só é forçada aqui (dentro do guard de motion): com
         // reduced-motion, a seção não roda a timeline e o subtítulo precisa
         // ficar visível estaticamente em vez de sumir para sempre.
-        gsap.set('[data-bsub]', { opacity: 0 })
+        gsap.set('[data-bsub], [data-bquote]', { opacity: 0 })
         gsap.timeline({
           scrollTrigger: {
             trigger: root.current,
@@ -102,7 +102,10 @@ export default function Bernabeu() {
         })
           .fromTo('[data-btitle]', { opacity: 0, yPercent: 20 }, { opacity: 1, yPercent: 0, duration: 1 })
           .to('[data-btitle]', { opacity: 0, duration: 1 }, '+=1')
-          .fromTo('[data-bsub]', { opacity: 0 }, { opacity: 1, duration: 1 })
+          .fromTo('[data-bsub]', { opacity: 0 }, { opacity: 1, duration: 0.8 })
+          .to('[data-bsub]', { opacity: 0, duration: 0.8 }, '+=0.6')
+          // payoff: a frase que define as noites europeias desta casa
+          .fromTo('[data-bquote]', { opacity: 0, yPercent: 12 }, { opacity: 1, yPercent: 0, duration: 1 })
       })
     }, root)
     return () => ctx.revert()
@@ -125,9 +128,15 @@ export default function Bernabeu() {
         <p data-btitle className="font-display text-[8vw] leading-none text-center">
           SANTIAGO<br />BERNABÉU
         </p>
-        <p data-bsub className="mt-4 text-sm tracking-[0.4em] opacity-70">
+        <p data-bsub className="mt-4 text-sm tracking-[0.35em] opacity-70">
           05 — THE HOME OF LEGENDS
         </p>
+        <div data-bquote className="absolute bottom-[14vh] text-center">
+          <p className="font-display text-[2.4vw] text-gold">
+            “90 minuti en el Bernabéu son molto longo.”
+          </p>
+          <p className="mt-3 text-xs tracking-[0.35em] opacity-50">JUANITO, 1985</p>
+        </div>
       </div>
     </section>
   )

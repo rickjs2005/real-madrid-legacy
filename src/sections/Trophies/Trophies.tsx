@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { trophies } from '../../data/trophies'
+import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -49,7 +50,7 @@ export default function Trophies() {
 
   return (
     <section ref={root} id="trophies" className="relative h-screen overflow-hidden text-day">
-      <p className="absolute top-[8vh] left-[8vw] z-10 text-sm tracking-[0.4em] opacity-50">04 — TROPHIES</p>
+      <SectionLabel n="04" title="TROPHIES" className="absolute top-[8vh] left-[8vw] z-10" />
       {trophies.map((t, i) => (
         <div
           key={t.name}

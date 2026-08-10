@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -22,7 +23,7 @@ export default function Madridista() {
 
   return (
     <section ref={root} id="madridista" className="flex min-h-[80vh] flex-col items-center justify-center text-center">
-      <p className="text-sm tracking-[0.4em] opacity-50">08 — MADRIDISTA</p>
+      <SectionLabel n="08" title="MADRIDISTA" />
       <div className="mt-8 overflow-hidden">
         <h2 data-word className="font-display text-[10vw] leading-none">MADRIDISTA</h2>
       </div>
