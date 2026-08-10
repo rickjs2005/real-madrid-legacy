@@ -70,7 +70,7 @@ function LightCone({ from, to }: { from: [number, number, number]; to: [number, 
   return (
     <mesh position={position} quaternion={quaternion}>
       <coneGeometry args={[0.55, length, 20, 1, true]} />
-      <meshBasicMaterial color="#ffedc0" transparent opacity={0.028} side={THREE.DoubleSide} depthWrite={false} blending={THREE.AdditiveBlending} />
+      <meshBasicMaterial color="#d9b25f" transparent opacity={0.03} side={THREE.DoubleSide} depthWrite={false} blending={THREE.AdditiveBlending} />
     </mesh>
   )
 }
@@ -105,11 +105,11 @@ function Stadium() {
         <cylinderGeometry args={[9.5, 9.8, 3.4, 64, 1, true]} />
         <meshStandardMaterial color="#2b3140" flatShading side={THREE.DoubleSide} roughness={0.6} metalness={0.35} />
       </mesh>
-      {/* bandas de LED da fachada — brilho contido, o bloom faz o resto */}
+      {/* bandas de LED da fachada — douradas, o brilho da marca */}
       {[2.2, 3.6].map((y) => (
         <mesh key={y} rotation={[-Math.PI / 2, 0, 0]} position={[0, y, 0]} scale={[1.4, 1, 1]}>
           <torusGeometry args={[9.66, 0.022, 8, 96]} />
-          <meshStandardMaterial color="#e8dcc0" emissive="#e8dcc0" emissiveIntensity={1.3} toneMapped={false} />
+          <meshStandardMaterial color="#d9b25f" emissive="#d9b25f" emissiveIntensity={2.4} toneMapped={false} />
         </mesh>
       ))}
       {/* anel de cobertura com linha de refletores */}
@@ -119,7 +119,7 @@ function Stadium() {
       </mesh>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 4.45, 0]} scale={[1.4, 1, 1]}>
         <torusGeometry args={[7.5, 0.035, 8, 96]} />
-        <meshStandardMaterial color="#fff7e0" emissive="#fff7e0" emissiveIntensity={1.8} toneMapped={false} />
+        <meshStandardMaterial color="#e6c477" emissive="#e6c477" emissiveIntensity={2.8} toneMapped={false} />
       </mesh>
       {/* cones volumétricos dos refletores (apex na cobertura, base no gramado) */}
       {CONE_SOURCES.map((from, i) => (
@@ -166,7 +166,8 @@ export default function Scene({
       <Rig progress={progress} />
       <fog attach="fog" args={['#05070f', 20, 48]} />
       <EffectComposer>
-        <Bloom intensity={0.55} luminanceThreshold={0.75} mipmapBlur />
+        {/* threshold mais baixo para o dourado (menos luminante que branco) florescer */}
+        <Bloom intensity={0.75} luminanceThreshold={0.6} mipmapBlur />
       </EffectComposer>
     </Canvas>
   )
