@@ -6,6 +6,8 @@ import Squad from './sections/Squad/Squad'
 import Legacy from './sections/Legacy/Legacy'
 import Trophies from './sections/Trophies/Trophies'
 import Bernabeu from './sections/Bernabeu/Bernabeu'
+import Latest from './sections/Latest/Latest'
+import Shop from './sections/Shop/Shop'
 import { initSmoothScroll } from './lib/lenis'
 import { mountLightArc } from './lib/lightArc'
 
@@ -24,6 +26,8 @@ export default function App() {
         <Legacy />
         <Trophies />
         <Bernabeu />
+        <Latest />
+        <Shop />
       </main>
     </>
   )
