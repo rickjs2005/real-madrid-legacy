@@ -107,13 +107,26 @@ export default function Legacy() {
         </div>
       </div>
 
-      {eras.map((era) => (
+      {eras.map((era, i) => (
         <div
           key={era.year}
           data-era
           className="absolute inset-0 flex items-center justify-between pl-[12vw] pr-[10vw]"
           style={{ opacity: 0 }}
         >
+          {/* sobreposição editorial: a era anterior espia por trás da moldura
+              em alguns capítulos (spread de revista, não scrapbook) */}
+          {[1, 4, 7].includes(i) && (
+            <div className="absolute right-[34vw] top-[15vh] h-[34vh] w-[13vw] overflow-hidden opacity-60">
+              <img
+                src={`/assets/legacy/${eras[i - 1].year}.webp`}
+                alt=""
+                onError={(e) => ((e.currentTarget.parentElement as HTMLElement).style.display = 'none')}
+                className={`h-full w-full object-cover ${ERA_FILTER} brightness-[0.6]`}
+              />
+              <div className="pointer-events-none absolute inset-0 ring-1 ring-day/10" />
+            </div>
+          )}
           <div className="max-w-[42vw]">
             <p data-line className="font-display text-[15vw] leading-none">{era.year}</p>
             <p data-line className="font-display text-[2.2vw] text-gold mt-2">{era.title}</p>
@@ -130,7 +143,7 @@ export default function Legacy() {
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(5,7,15,0.6))]" />
             <div className="pointer-events-none absolute inset-0 opacity-20 mix-blend-overlay" style={{ backgroundImage: GRAIN }} />
             <div className="pointer-events-none absolute inset-0 ring-1 ring-day/15" />
-            <p className="absolute bottom-4 left-4 text-[10px] tracking-[0.3em] opacity-50">{era.year} — REAL MADRID CF</p>
+            <p className="absolute bottom-4 left-4 text-[10px] tracking-[0.3em] opacity-50">{era.year} — {era.place}</p>
           </div>
         </div>
       ))}

@@ -113,6 +113,62 @@ function Crowd() {
   )
 }
 
+// A cidade ao redor: grade esparsa de luzes no plano do chão, fora do bowl —
+// referência das fotos noturnas do Bernabéu (o estádio nunca aparece sozinho).
+function CityLights() {
+  const { positions, colors } = useMemo(() => {
+    const N = 1600
+    const pos: number[] = []
+    const col: number[] = []
+    const warm = new THREE.Color('#8a7a55')
+    const cool = new THREE.Color('#5a6478')
+    while (pos.length / 3 < N) {
+      // snap em grade + jitter = quarteirões
+      const x = (Math.floor(Math.random() * 44) - 22) * 1.5 + (Math.random() - 0.5) * 0.6
+      const z = (Math.floor(Math.random() * 44) - 22) * 1.5 + (Math.random() - 0.5) * 0.6
+      if ((x / 1.4) ** 2 + z ** 2 < 12 ** 2) continue // fora do estádio
+      pos.push(x, 0.05, z)
+      const c = Math.random() < 0.75 ? warm : cool
+      col.push(c.r, c.g, c.b)
+    }
+    return { positions: new Float32Array(pos), colors: new Float32Array(col) }
+  }, [])
+  return (
+    <points>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+      </bufferGeometry>
+      <pointsMaterial size={0.07} vertexColors sizeAttenuation depthWrite={false} fog={false} />
+    </points>
+  )
+}
+
+// Céu estrelado sutil sobre a cena
+function Stars() {
+  const positions = useMemo(() => {
+    const N = 900
+    const pos = new Float32Array(N * 3)
+    for (let i = 0; i < N; i++) {
+      const a = Math.random() * Math.PI * 2
+      const elev = 0.15 + Math.random() * 1.35 // só hemisfério superior
+      const r = 34 + Math.random() * 10
+      pos[i * 3] = Math.cos(a) * Math.cos(elev) * r
+      pos[i * 3 + 1] = Math.sin(elev) * r
+      pos[i * 3 + 2] = Math.sin(a) * Math.cos(elev) * r
+    }
+    return pos
+  }, [])
+  return (
+    <points>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+      </bufferGeometry>
+      <pointsMaterial size={0.06} color="#aeb6c6" sizeAttenuation depthWrite={false} fog={false} transparent opacity={0.7} />
+    </points>
+  )
+}
+
 // Feixe de première varrendo o céu do estádio, bem lento
 function LightSweep() {
   const g = useRef<THREE.Group>(null)
@@ -180,6 +236,8 @@ function Stadium() {
         <LightCone key={i} from={from} to={[from[0] * 0.25, 0, from[2] * 0.25]} />
       ))}
       <Crowd />
+      <CityLights />
+      <Stars />
       <LightSweep />
       {/* iluminação real do campo — spotlights miram a origem por padrão */}
       <ambientLight intensity={0.12} />

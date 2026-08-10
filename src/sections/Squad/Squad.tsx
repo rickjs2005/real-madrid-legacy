@@ -56,20 +56,24 @@ export default function Squad() {
       <div data-track className="flex h-screen w-max">
         {players.map((p) => (
           <article key={p.index} className="group relative flex h-screen w-screen shrink-0 items-center px-[8vw]">
+            {/* sanduíche tipográfico: o nome atravessa POR TRÁS da foto (z-0 < z-10),
+                enquanto índice, posição e stats ficam na frente (z-20) */}
+            <h2 className="absolute left-[8vw] z-0 font-display text-[10.5vw] leading-[0.9] whitespace-nowrap">
+              {p.name}
+            </h2>
             <img
               data-player-photo
               src={`/assets/squad/p${p.index}.webp`}
               alt={p.name}
               onError={(e) => (e.currentTarget.style.display = 'none')}
-              className="absolute right-[10vw] bottom-0 h-[88vh] object-contain object-bottom
+              className="absolute right-[10vw] bottom-0 z-10 h-[88vh] object-contain object-bottom
                          [filter:grayscale(1)_sepia(0.3)_hue-rotate(190deg)_saturate(2)_brightness(0.8)]
                          transition-[filter] duration-500 group-hover:[filter:none]"
             />
-            <div className="relative">
+            <div className="relative z-20 self-start mt-[16vh]">
               <p className="font-display text-[2vw] text-gold">{p.index}</p>
-              <h2 className="font-display text-[9vw] leading-[0.9]">{p.name}</h2>
-              <p className="mt-2 text-sm tracking-[0.4em] opacity-60">{p.position}</p>
-              <div className="mt-8 max-w-xs opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
+              <p className="mt-1 text-sm tracking-[0.4em] opacity-60">{p.position}</p>
+              <div className="mt-[38vh] max-w-xs opacity-0 translate-y-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-y-0">
                 <div className="flex gap-10 border-t border-day/20 pt-4">
                   <div>
                     <p className="text-xs tracking-[0.3em] opacity-50">NUMBER</p>
