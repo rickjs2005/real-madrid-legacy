@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-day: #f5f4f0;
+  --color-dusk: #2a2d3a;
+  --color-night: #05070f;
+  --color-gold: #c9a24b;
+  --color-ink: #0a0a0a;
+  --font-display: 'Anton', sans-serif;
+  --font-sans: 'Space Grotesk Variable', sans-serif;
+}
+
+html {
+  background: var(--color-day);
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink);
+  overflow-x: hidden;
+}
