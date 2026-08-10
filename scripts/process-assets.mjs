@@ -40,6 +40,7 @@ const MAP = {
   '1960.jpg': 'assets/legacy/1960.webp',
   '1986.jpg': 'assets/legacy/1986.webp',
   '2018.jpg': 'assets/legacy/2018.webp',
+  '2022.jpg': 'assets/legacy/2022.webp',
   'room.jpg': { dest: 'assets/trophies/room.webp', width: 1920, quality: 78 },
   'european-cup.jpg': { dest: 'assets/trophies/european-cup.webp', width: 1920, quality: 78 },
   'stadium-night.jpg': { dest: 'assets/hero/stadium-night.webp', width: 2200, quality: 80 },

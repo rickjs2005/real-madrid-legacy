@@ -24,6 +24,7 @@ Photos sourced from Wikimedia Commons under their individual licenses:
 - Zinedine Zidane — Walterlan Papetti, CC BY-SA 2.0 — https://commons.wikimedia.org/wiki/File:Zinedine_Zidane.jpg
 - Cristiano Ronaldo vs Ludogorets, 2014 — Biser Todorov, CC BY-SA 2.0 — https://commons.wikimedia.org/wiki/File:Ronaldo_vs_Ludogorets_(51101071755)_(Ronaldo_cropped).jpg
 - Cristiano Ronaldo, moments after the 2018 Champions League final (Kyiv) — Антон Зайцев (Anton Zaitsev), CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Ronaldo_in_2018.jpg
+- Karim Benzema wearing Real Madrid home kit, 2021-2022 — Real Madrid, CC BY 3.0 — https://commons.wikimedia.org/wiki/File:Karim_Benzema_wearing_Real_Madrid_home_kit_2021-2022.jpg
 - Vinícius Júnior, Brazil v Morocco, 2026 (x2) — Bryan Berlin / WikiPortraits, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Vin%C3%ADcius_J%C3%BAnior_Brazil_V_Morocco_13_June_2026-207_(cropped).jpg and https://commons.wikimedia.org/wiki/File:Vinicius_Junior_Brazil_V_Morocco_13_June_2026-94_(cropped).jpg
 - Kylian Mbappé, France v Senegal, 2026 — Bryan Berlin / WikiPortraits, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Kylian_Mbappe_France_v_Senegal_16_June_2026-391_(cropped).jpg
 - Jude Bellingham, Laureus World Sports Awards, 2024 — Barcex, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Red_Carpet_-_Jude_Bellingham_-_240422_190558_(cropped).jpg

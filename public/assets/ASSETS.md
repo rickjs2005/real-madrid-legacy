@@ -11,6 +11,7 @@ IA (Higgsfield): SOMENTE texturas/atmosferas, nunca rostos.
 | squad/p01.webp … p06.webp | 1 foto por jogador de squad.ts, corpo inteiro, fundo removido | Wikimedia Commons (ver créditos) | **preenchido** |
 | legacy/1902.webp … 2024.webp | 1 foto histórica por era de legacy.ts | Wikimedia Commons (ver créditos) | **preenchido** |
 | legacy/1960.webp, 1986.webp, 2018.webp | 3 eras adicionais (expansão para 8 eras) | Wikimedia Commons (ver créditos) | **preenchido** |
+| legacy/2022.webp | Era "LA DECIMOCUARTA" (Benzema) em legacy.ts | Wikimedia Commons (ver créditos) | **preenchido** |
 | trophies/room.webp | Sala de troféus / museu, fundo full-bleed da seção Trophies | Wikimedia Commons (ver créditos) | **preenchido** |
 | trophies/european-cup.webp | Taça de Campeões da Europa / Champions League | Wikimedia Commons (ver créditos) | **preenchido** |
 | trophies/la-liga.webp, copa-del-rey.webp | Troféu recortado, fundo transparente | — | **pulado** (nenhuma foto PD/CC limpa encontrada) |
@@ -35,6 +36,7 @@ marketing de produto foi sourced (ver linhas "pulado" acima).
 | legacy/1986.webp | [Real Madrid in Oisterwijk Hugo Sanchez , kop, Bestanddeelnr 934-2327.jpg](https://commons.wikimedia.org/wiki/File:Real_Madrid_in_Oisterwijk_Hugo_Sanchez_,_kop,_Bestanddeelnr_934-2327.jpg) | Rob Bogaerts / Anefo (Nationaal Archief) | CC0 |
 | legacy/2014.webp | [Ronaldo vs Ludogorets (51101071755) (Ronaldo cropped).jpg](https://commons.wikimedia.org/wiki/File:Ronaldo_vs_Ludogorets_(51101071755)_(Ronaldo_cropped).jpg) | Biser Todorov | CC BY-SA 2.0 |
 | legacy/2018.webp | [Ronaldo in 2018.jpg](https://commons.wikimedia.org/wiki/File:Ronaldo_in_2018.jpg) | Антон Зайцев (Anton Zaitsev) | CC BY-SA 3.0 |
+| legacy/2022.webp | [Karim Benzema wearing Real Madrid home kit 2021-2022.jpg](https://commons.wikimedia.org/wiki/File:Karim_Benzema_wearing_Real_Madrid_home_kit_2021-2022.jpg) | Real Madrid | CC BY 3.0 |
 | legacy/2024.webp | [Vinícius Júnior Brazil V Morocco 13 June 2026-207 (cropped).jpg](https://commons.wikimedia.org/wiki/File:Vin%C3%ADcius_J%C3%BAnior_Brazil_V_Morocco_13_June_2026-207_(cropped).jpg) | Bryan Berlin / WikiPortraits | CC BY-SA 4.0 |
 | squad/p01.webp (Mbappé) | [Kylian Mbappe France v Senegal 16 June 2026-391 (cropped).jpg](https://commons.wikimedia.org/wiki/File:Kylian_Mbappe_France_v_Senegal_16_June_2026-391_(cropped).jpg) | Bryan Berlin / WikiPortraits | CC BY-SA 4.0 |
 | squad/p02.webp (Vinícius Jr) | [Vinicius Junior Brazil V Morocco 13 June 2026-94 (cropped).jpg](https://commons.wikimedia.org/wiki/File:Vinicius_Junior_Brazil_V_Morocco_13_June_2026-94_(cropped).jpg) | Bryan Berlin / WikiPortraits | CC BY-SA 4.0 |
@@ -46,6 +48,10 @@ marketing de produto foi sourced (ver linhas "pulado" acima).
 | trophies/room.webp | [170928 Museo del Real Madrid C. F.jpg](https://commons.wikimedia.org/wiki/File:170928_Museo_del_Real_Madrid_C._F.jpg) | Lệ Xuân | CC BY-SA 4.0 |
 | trophies/european-cup.webp | [UEFA Champions League original trophy (1995-2005).jpg](https://commons.wikimedia.org/wiki/File:UEFA_Champions_League_original_trophy_(1995-2005).jpg) | Jay Clark | CC BY-SA 2.5 |
 | hero/stadium-night.webp | [Santiago Bernabéu Stadium, Real Madrid - Borussia Dortmund, 2013 - 11.jpg](https://commons.wikimedia.org/wiki/File:Santiago_Bernab%C3%A9u_Stadium,_Real_Madrid_-_Borussia_Dortmund,_2013_-_11.jpg) | Little Savage | CC BY-SA 3.0 |
+
+Nota: `legacy/1986.webp` e `legacy/1998.webp` não são mais referenciados por `src/data/legacy.ts`
+(as eras 1986 e 1998 foram removidas da timeline num commit paralelo) — os arquivos continuam na
+pasta, não usados, e não foram apagados.
 
 Notas de sourcing:
 - Nenhuma foto de 1902/1956/1998/2002/2014 mostra necessariamente o jogador citado no ano exato do
@@ -87,3 +93,13 @@ Notas de sourcing:
   era o critério central do brief. "2010 Champions League Final opening ceremony.jpg" (final
   Bayern-Inter 2010 no Bernabéu, CC BY 2.0) tinha tifos vistosos dos dois lados mas nenhuma presença
   do Real Madrid — descartada por mismatch temático, mesmo sendo no próprio estádio.
+- legacy/2022.webp (era "LA DECIMOCUARTA", Benzema): foto oficial do Real Madrid do lançamento da
+  camisa titular 21/22 (1º/jun/2021), retrato vertical (1494×1835, mantido em resolução nativa,
+  abaixo do teto de 1600px do script), Benzema de braços cruzados na camisa branca titular, escudo e
+  patrocinadores nítidos — mesmo padrão de fonte do squad/p04 (still oficial do Real Madrid, CC BY).
+  Buscas "Benzema Real Madrid", "Benzema 2022", `Category:Karim Benzema` no Commons; candidata
+  alternativa "Karim Benzema - Ofrenda de la Liga y la Champions-56-L.Millán (cropped).jpg" (evento de
+  ofrenda dos títulos de 2022 na Catedral da Almudena, CC BY 2.0, Fotografías Archimadrid.es) foi
+  descartada após preview visual — Benzema aparece de terno, gravata e óculos escuros, sem a camisa do
+  clube visível. Não foram encontradas fotos de Кирилл Венедиктов/Kirill Venediktov (soccer.ru)
+  especificamente de Benzema em 2022 nesta busca.
