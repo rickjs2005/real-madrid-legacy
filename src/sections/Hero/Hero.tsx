@@ -53,7 +53,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section ref={root} id="hero" className="relative h-screen overflow-hidden text-day">
+    <section ref={root} id="hero" className="relative h-screen overflow-hidden bg-night text-day">
       <div data-hero-photo className="absolute inset-0">
         <img
           src="/assets/hero/stadium-night.webp"
