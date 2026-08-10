@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { Component, Suspense, lazy, useEffect, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { trophies } from '../../data/trophies'
@@ -6,12 +7,49 @@ import SectionLabel from '../../components/SectionLabel'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const TrophyScene = lazy(() => import('./TrophyScene'))
+
+// se o cromo 3D falhar, a seção segue viva só com números + sala (sem quebra)
+class TrophyBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  componentDidCatch(error: Error) {
+    console.warn('[trophies] 3d trophy failed, continuing without it:', error.message)
+  }
+  render() {
+    return this.state.failed ? null : this.props.children
+  }
+}
+
 // A sala de troféus como faixa escura entre listras douradas (o vocabulário do
 // hero): a fotografia do museu fica escura como é de verdade, os números
-// monumentais atravessam a faixa por cima, e o final da seção é a cerimônia do
-// apagar das luzes — o véu noturno que entrega a página ao Bernabéu.
+// monumentais atravessam a faixa por cima, a taça dos "big ears" gira em cromo
+// 3D sobre a faixa (desvio consciente do spec "WebGL só no Bernabéu" — este é o
+// segundo e último canvas, a joia da seção), e o final é a cerimônia do apagar
+// das luzes — o véu noturno que entrega a página ao Bernabéu.
 export default function Trophies() {
   const root = useRef<HTMLElement>(null)
+  const progress = useRef(0)
+  const [mount3d, setMount3d] = useState(false)
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const mountIo = new IntersectionObserver(
+      ([entry]) => entry.isIntersecting && setMount3d(true),
+      { rootMargin: '100% 0px' },
+    )
+    const viewIo = new IntersectionObserver(([entry]) => setInView(entry.isIntersecting))
+    if (root.current) {
+      mountIo.observe(root.current)
+      viewIo.observe(root.current)
+    }
+    return () => {
+      mountIo.disconnect()
+      viewIo.disconnect()
+    }
+  }, [])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -25,6 +63,7 @@ export default function Trophies() {
             end: () => `+=${slides.length * 100 + 60}%`,
             pin: true,
             scrub: 0.5,
+            onUpdate: (self) => (progress.current = self.progress),
           },
         })
         slides.forEach((slide, i) => {
@@ -82,6 +121,16 @@ export default function Trophies() {
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-night/70 via-transparent to-night/40" />
       </div>
       <SectionLabel n="04" title="TROPHIES" className="absolute top-[8vh] left-[8vw] z-10" />
+      {/* a joia: a taça em cromo 3D girando sobre a faixa escura */}
+      {mount3d && (
+        <div className="pointer-events-none absolute right-[4vw] top-[12vh] z-[15] h-[74vh] w-[34vw]">
+          <TrophyBoundary>
+            <Suspense fallback={null}>
+              <TrophyScene progress={progress} frameloop={inView ? 'always' : 'never'} />
+            </Suspense>
+          </TrophyBoundary>
+        </div>
+      )}
       {trophies.map((t, i) => (
         <div key={t.name} data-trophy className="absolute inset-0 z-10 px-[8vw]" style={{ opacity: i === 0 ? 1 : 0 }}>
           {/* número monumental atravessando a faixa; nome ancorado abaixo dela */}

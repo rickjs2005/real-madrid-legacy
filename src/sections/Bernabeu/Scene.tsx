@@ -1,8 +1,22 @@
 import { useMemo, useRef } from 'react'
 import * as THREE from 'three'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 import type { MutableRefObject } from 'react'
+
+// Reflexos de ambiente (estúdio) para os materiais metálicos da fachada e da
+// cobertura — embutido no three, sem rede (gravação offline segura).
+function StudioEnv() {
+  const { gl, scene } = useThree()
+  useMemo(() => {
+    const pmrem = new THREE.PMREMGenerator(gl)
+    const env = pmrem.fromScene(new RoomEnvironment(), 0.04).texture
+    scene.environment = env
+    scene.environmentIntensity = 0.25
+  }, [gl, scene])
+  return null
+}
 
 // Estádio próprio estilizado, direção "noite de jogo": gramado com marcações
 // reais (textura procedural em canvas — zero assets), arquibancada em dois
@@ -210,10 +224,10 @@ function Stadium() {
         <torusGeometry args={[7.6, 2.0, 4, 64]} />
         <meshStandardMaterial color="#0f141f" flatShading roughness={0.95} />
       </mesh>
-      {/* fachada envolvente */}
+      {/* fachada envolvente — metal escovado refletindo o ambiente */}
       <mesh position={[0, 2.9, 0]} scale={[1.4, 1, 1]}>
         <cylinderGeometry args={[9.5, 9.8, 3.4, 64, 1, true]} />
-        <meshStandardMaterial color="#2b3140" flatShading side={THREE.DoubleSide} roughness={0.6} metalness={0.35} />
+        <meshStandardMaterial color="#39404f" flatShading side={THREE.DoubleSide} roughness={0.35} metalness={0.75} />
       </mesh>
       {/* bandas de LED da fachada — douradas, o brilho da marca */}
       {[2.2, 3.6].map((y) => (
@@ -276,6 +290,7 @@ export default function Scene({
       frameloop={frameloop}
       onCreated={({ gl }) => gl.setClearColor('#05070f')}
     >
+      <StudioEnv />
       <Stadium />
       <Rig progress={progress} />
       <fog attach="fog" args={['#05070f', 20, 48]} />
