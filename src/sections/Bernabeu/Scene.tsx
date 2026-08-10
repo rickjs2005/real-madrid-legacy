@@ -51,8 +51,6 @@ const CONE_SOURCES: [number, number, number][] = [
   [7.7, 4.4, -4.5],
   [-7.7, 4.4, 4.5],
   [7.7, 4.4, 4.5],
-  [0, 4.4, -6],
-  [0, 4.4, 6],
 ]
 
 // Cone alinhado do refletor (apex) ao ponto do gramado (base): a geometria do
@@ -71,16 +69,18 @@ function LightCone({ from, to }: { from: [number, number, number]; to: [number, 
   }, [from, to])
   return (
     <mesh position={position} quaternion={quaternion}>
-      <coneGeometry args={[1.5, length, 24, 1, true]} />
-      <meshBasicMaterial color="#ffedc0" transparent opacity={0.05} side={THREE.DoubleSide} depthWrite={false} blending={THREE.AdditiveBlending} />
+      <coneGeometry args={[0.55, length, 20, 1, true]} />
+      <meshBasicMaterial color="#ffedc0" transparent opacity={0.028} side={THREE.DoubleSide} depthWrite={false} blending={THREE.AdditiveBlending} />
     </mesh>
   )
 }
 
 function Stadium() {
   const pitch = useMemo(makePitchTexture, [])
+  // escala global: o bowl inteiro precisa caber no enquadramento aéreo
+  // (fov 40 a ~30 de distância enxerga ~22 de altura; diâmetro bruto era 27)
   return (
-    <group>
+    <group scale={0.55}>
       {/* gramado com marcações */}
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[10.5, 6.8]} />
@@ -105,11 +105,11 @@ function Stadium() {
         <cylinderGeometry args={[9.5, 9.8, 3.4, 64, 1, true]} />
         <meshStandardMaterial color="#2b3140" flatShading side={THREE.DoubleSide} roughness={0.6} metalness={0.35} />
       </mesh>
-      {/* bandas de LED da fachada — o brilho que o bloom pega */}
-      {[1.9, 2.9, 3.9].map((y) => (
+      {/* bandas de LED da fachada — brilho contido, o bloom faz o resto */}
+      {[2.2, 3.6].map((y) => (
         <mesh key={y} rotation={[-Math.PI / 2, 0, 0]} position={[0, y, 0]} scale={[1.4, 1, 1]}>
-          <torusGeometry args={[9.66, 0.045, 8, 96]} />
-          <meshStandardMaterial color="#f0e6d0" emissive="#f0e6d0" emissiveIntensity={2.6} toneMapped={false} />
+          <torusGeometry args={[9.66, 0.022, 8, 96]} />
+          <meshStandardMaterial color="#e8dcc0" emissive="#e8dcc0" emissiveIntensity={1.3} toneMapped={false} />
         </mesh>
       ))}
       {/* anel de cobertura com linha de refletores */}
@@ -118,8 +118,8 @@ function Stadium() {
         <meshStandardMaterial color="#1a2030" flatShading roughness={0.8} />
       </mesh>
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 4.45, 0]} scale={[1.4, 1, 1]}>
-        <torusGeometry args={[7.5, 0.06, 8, 96]} />
-        <meshStandardMaterial color="#fff7e0" emissive="#fff7e0" emissiveIntensity={3.2} toneMapped={false} />
+        <torusGeometry args={[7.5, 0.035, 8, 96]} />
+        <meshStandardMaterial color="#fff7e0" emissive="#fff7e0" emissiveIntensity={1.8} toneMapped={false} />
       </mesh>
       {/* cones volumétricos dos refletores (apex na cobertura, base no gramado) */}
       {CONE_SOURCES.map((from, i) => (
@@ -141,7 +141,7 @@ function Rig({ progress }: { progress: MutableRefObject<number> }) {
     camera.position.set(
       Math.sin(p * Math.PI * 0.5) * 14 * (1 - p * 0.8),
       22 - p * 20.5,
-      22 - p * 14,
+      22 - p * 17.5, // termina em z=4.5: dentro do bowl (raio ~5.3 na escala 0.55)
     )
     camera.lookAt(0, 1 - p, 0)
   })
@@ -164,9 +164,9 @@ export default function Scene({
     >
       <Stadium />
       <Rig progress={progress} />
-      <fog attach="fog" args={['#05070f', 26, 60]} />
+      <fog attach="fog" args={['#05070f', 20, 48]} />
       <EffectComposer>
-        <Bloom intensity={0.85} luminanceThreshold={0.55} mipmapBlur />
+        <Bloom intensity={0.55} luminanceThreshold={0.75} mipmapBlur />
       </EffectComposer>
     </Canvas>
   )
