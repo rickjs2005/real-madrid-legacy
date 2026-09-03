@@ -53,6 +53,7 @@ export default function Dominance() {
         .timeline({
           scrollTrigger: { trigger: '[data-dom-ramos]', start: 'top top', end: '+=320%', pin: true, scrub: 0.75 },
         })
+        .fromTo('[data-dom-match]', { opacity: 0, scale: 1.12 }, { opacity: 0.34, scale: 1.04, duration: 0.3, ease: 'power2.out' }, 0.02)
         .fromTo('[data-dom-clock]', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.04)
         .to(clockState, {
           value: 92 * 60 + 48,
@@ -64,9 +65,17 @@ export default function Dominance() {
         }, 0.12)
         .to('[data-dom-clock]', { color: '#b89b5e', duration: 0.02 }, 0.5)
         .fromTo('[data-dom-flash]', { opacity: 0 }, { opacity: 1, duration: 0.018, repeat: 1, yoyo: true }, 0.51)
-        .fromTo('[data-dom-ramos-name] .mask-line > span', { yPercent: 115 }, { yPercent: 0, duration: 0.07, ease: 'expo.out' }, 0.54)
-        .fromTo('[data-dom-ramos-copy]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.08, ease: 'power3.out' }, 0.64)
-        .fromTo('[data-dom-ramos-rule]', { scaleX: 0 }, { scaleX: 1, duration: 0.12, ease: 'power3.inOut' }, 0.68)
+        .to('[data-dom-match]', { opacity: 0, scale: 1, duration: 0.035, ease: 'power2.in' }, 0.515)
+        .fromTo(
+          '[data-dom-aftermath]',
+          { opacity: 0, scale: 1.12, clipPath: 'inset(0 0 100% 0)' },
+          { opacity: 0.48, scale: 1.02, clipPath: 'inset(0 0 0% 0)', duration: 0.13, ease: 'expo.out' },
+          0.53,
+        )
+        .fromTo('[data-dom-moment]', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.05, ease: 'power3.out' }, 0.57)
+        .fromTo('[data-dom-ramos-name] .mask-line > span', { yPercent: 115 }, { yPercent: 0, duration: 0.07, ease: 'expo.out' }, 0.59)
+        .fromTo('[data-dom-ramos-copy]', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.08, ease: 'power3.out' }, 0.68)
+        .fromTo('[data-dom-ramos-rule]', { scaleX: 0 }, { scaleX: 1, duration: 0.12, ease: 'power3.inOut' }, 0.7)
 
       const reel = track.current!
       const distance = () => reel.scrollWidth - window.innerWidth
@@ -130,7 +139,34 @@ export default function Dominance() {
 
       <div data-dom-ramos className="relative h-screen overflow-hidden bg-black">
         <ChapterMark n="04" title="THE OBSESSION" right="24 · 05 · 2014 · LISBON" />
-        <span ref={clock} data-dom-clock data-stretch className="t-num absolute left-[5vw] top-[16vh] text-[29vw] text-silver opacity-0">
+
+        {/* O palco aparece enquanto o relógio avança; o flash em 92:48 troca o jogo pela consequência. */}
+        <div data-dom-match className="absolute inset-0 z-0 opacity-0">
+          <img
+            src="/assets/dominance/lisbon-final.webp"
+            alt="2014 Champions League final in Lisbon"
+            className="img-dominance h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_68%_52%,rgba(8,8,8,0.12),#080808_82%)]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60" />
+        </div>
+
+        <div data-dom-aftermath className="absolute inset-y-0 right-0 z-[5] w-[58vw] overflow-hidden opacity-0">
+          <img
+            src="/assets/dominance/ramos-9248.webp"
+            alt="Real Madrid celebrating La Décima after the 2014 final"
+            className="img-flash h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/25 to-black/5" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/55" />
+          <div className="absolute inset-0 crt" />
+        </div>
+
+        <p data-dom-moment className="t-label absolute right-[6vw] top-[13vh] z-20 text-right opacity-0">
+          THE CONSEQUENCE · LA DÉCIMA
+        </p>
+
+        <span ref={clock} data-dom-clock data-stretch className="t-num absolute left-[5vw] top-[16vh] z-10 text-[29vw] text-silver opacity-0">
           90:00
         </span>
         <div data-dom-flash className="pointer-events-none absolute inset-0 z-30 bg-pure opacity-0" />

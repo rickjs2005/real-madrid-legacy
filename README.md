@@ -17,6 +17,8 @@ Out of scope by design: mobile, SEO, 404, analytics, backend. v1 (the 10-section
 - Paco Gento, Feyenoord v Real Madrid, 1965 — Rob Bogaerts / Anefo, CC BY 2.0 — https://commons.wikimedia.org/wiki/File:Feyenoord_tegen_Real_Madrid_2-1,_spelmomenten._Gento_(cropped).jpg
 - Roberto Carlos, 2023 — Flickr via Wikimedia Commons, CC BY 2.0 — https://commons.wikimedia.org/wiki/File:LS3_1288_(53332367864)_(cropped).jpg
 - Bernabéu facade reference used for AI reframes: MottaW, CC BY 4.0 (see below)
+- 2014 Champions League final in Lisbon — Miguelazo84, CC BY-SA 4.0 — https://commons.wikimedia.org/wiki/File:Real_Madird_4-1_Atletico_2014_Final_Champions_Lisboa_3.jpg
+- Real Madrid celebrating La Décima after the 2014 final — El Coleccionista de Instantes Fotografía & Video, CC BY-SA 2.0 — https://commons.wikimedia.org/wiki/File:Final_Champions_League_2014_Real_Madrid_-_Atl%C3%A9tico_de_Madrid_(14081181609).jpg
 
 ---
 

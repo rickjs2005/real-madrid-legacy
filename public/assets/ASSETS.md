@@ -14,6 +14,8 @@ IA (Higgsfield): SOMENTE texturas/atmosferas, nunca rostos.
 | legacy/2022.webp | Era "LA DECIMOCUARTA" (Benzema) em legacy.ts | Wikimedia Commons (ver créditos) | **preenchido** |
 | trophies/room.webp | Sala de troféus / museu, fundo full-bleed da seção Trophies | Wikimedia Commons (ver créditos) | **preenchido** |
 | trophies/european-cup.webp | Taça de Campeões da Europa / Champions League | Wikimedia Commons (ver créditos) | **preenchido** |
+| dominance/lisbon-final.webp | Estádio da Luz durante a final da Champions de 2014 | Wikimedia Commons (ver créditos) | **preenchido** |
+| dominance/ramos-9248.webp | Real Madrid celebrando a Décima após a final de 2014 | Wikimedia Commons (ver créditos) | **preenchido** |
 | trophies/la-liga.webp, copa-del-rey.webp | Troféu recortado, fundo transparente | — | **pulado** (nenhuma foto PD/CC limpa encontrada) |
 | bernabeu/aerial.webp | Exterior do Bernabéu reformado (dez/2024) | Wikimedia Commons (ver créditos) | **preenchido** |
 | bernabeu/stadium.glb | Modelo 3D (Sketchfab, licença CC) OU omitir → seção usa low-poly próprio | download | pendente |
@@ -52,6 +54,8 @@ de não afiliação no encerramento.
 | bernabeu/aerial.webp | [M-estadio-santiago-bernabeu-diciembre-2024-a.jpg](https://commons.wikimedia.org/wiki/File:M-estadio-santiago-bernabeu-diciembre-2024-a.jpg) | MottaW | CC BY 4.0 |
 | trophies/room.webp | [170928 Museo del Real Madrid C. F.jpg](https://commons.wikimedia.org/wiki/File:170928_Museo_del_Real_Madrid_C._F.jpg) | Lệ Xuân | CC BY-SA 4.0 |
 | trophies/european-cup.webp | [UEFA Champions League original trophy (1995-2005).jpg](https://commons.wikimedia.org/wiki/File:UEFA_Champions_League_original_trophy_(1995-2005).jpg) | Jay Clark | CC BY-SA 2.5 |
+| dominance/lisbon-final.webp | [Real Madird 4-1 Atletico 2014 Final Champions Lisboa 3.jpg](https://commons.wikimedia.org/wiki/File:Real_Madird_4-1_Atletico_2014_Final_Champions_Lisboa_3.jpg) | Miguelazo84 | CC BY-SA 4.0 |
+| dominance/ramos-9248.webp | [Final Champions League 2014 Real Madrid - Atlético de Madrid.jpg](https://commons.wikimedia.org/wiki/File:Final_Champions_League_2014_Real_Madrid_-_Atl%C3%A9tico_de_Madrid_(14081181609).jpg) | El Coleccionista de Instantes Fotografía & Video | CC BY-SA 2.0 |
 | hero/stadium-night.webp | [Santiago Bernabéu Stadium, Real Madrid - Borussia Dortmund, 2013 - 11.jpg](https://commons.wikimedia.org/wiki/File:Santiago_Bernab%C3%A9u_Stadium,_Real_Madrid_-_Borussia_Dortmund,_2013_-_11.jpg) | Little Savage | CC BY-SA 3.0 |
 
 Nota: `legacy/1986.webp` e `legacy/1998.webp` não são mais referenciados por `src/data/legacy.ts`

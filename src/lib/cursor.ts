@@ -37,26 +37,46 @@ export function mountCursor() {
     gsap.to(dot, { scale: next === 'explore' ? 1 : 0, duration: 0.25 })
   }
 
-  const onMouseMove = (e: MouseEvent) => {
-    qx(e.clientX)
-    qy(e.clientY)
-    rx(e.clientX)
-    ry(e.clientY)
-    const el = (e.target as HTMLElement | null)?.closest<HTMLElement>('[data-cursor],[data-cursor-hide]')
+  let pointerX = -1
+  let pointerY = -1
+  let scrollRaf = 0
+
+  const updateStateAt = (x: number, y: number) => {
+    const el = document.elementFromPoint(x, y)?.closest<HTMLElement>('[data-cursor],[data-cursor-hide]')
     if (!el) return apply('explore')
     if (el.hasAttribute('data-cursor-hide')) return apply('hidden')
     apply((el.dataset.cursor as CursorState) ?? 'explore')
   }
+
+  const onMouseMove = (e: MouseEvent) => {
+    pointerX = e.clientX
+    pointerY = e.clientY
+    qx(pointerX)
+    qy(pointerY)
+    rx(pointerX)
+    ry(pointerY)
+    updateStateAt(pointerX, pointerY)
+  }
+  const onScroll = () => {
+    if (pointerX < 0 || scrollRaf) return
+    scrollRaf = requestAnimationFrame(() => {
+      scrollRaf = 0
+      updateStateAt(pointerX, pointerY)
+    })
+  }
   const onMouseLeave = () => apply('hidden')
   const onMouseEnter = () => apply('explore')
   window.addEventListener('mousemove', onMouseMove)
+  window.addEventListener('scroll', onScroll, { passive: true })
   document.addEventListener('mouseleave', onMouseLeave)
   document.addEventListener('mouseenter', onMouseEnter)
 
   return () => {
     window.removeEventListener('mousemove', onMouseMove)
+    window.removeEventListener('scroll', onScroll)
     document.removeEventListener('mouseleave', onMouseLeave)
     document.removeEventListener('mouseenter', onMouseEnter)
+    cancelAnimationFrame(scrollRaf)
     dot.remove()
     ring.remove()
   }
