@@ -8,6 +8,8 @@ import Dominance from './sections/Dominance/Dominance'
 import Kings from './sections/Kings/Kings'
 import NinetyMinutes from './sections/NinetyMinutes/NinetyMinutes'
 import Present from './sections/Present/Present'
+import MatchCentre from './sections/MatchCentre/MatchCentre'
+import Newsroom from './sections/Newsroom/Newsroom'
 import Eternal from './sections/Eternal/Eternal'
 import { initSmoothScroll } from './lib/lenis'
 import { mountVelocity } from './lib/velocity'
@@ -15,7 +17,7 @@ import { mountCursor } from './lib/cursor'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Oito capítulos de um filme, não sections. A progressão alterna tensão,
+// Dez capítulos de um filme, não sections. A progressão alterna tensão,
 // impacto, silêncio e release; o dourado só aparece quando a história entrega
 // glória.
 export default function App() {
@@ -49,6 +51,8 @@ export default function App() {
         <Kings />
         <NinetyMinutes />
         <Present />
+        <MatchCentre />
+        <Newsroom />
         <Eternal />
       </main>
     </>

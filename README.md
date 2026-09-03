@@ -1,15 +1,17 @@
 # REAL MADRID — THE ETERNAL CLUB
 
-Concept experience · 1920×1080 · runs locally, built to be screen-recorded (Instagram / TikTok / Reels / LinkedIn / portfolio).
-Not a football-results site: a film about what Real Madrid means. The complete experience ships all 8 chapters:
+Concept experience · 1920×1080 · built to be screen-recorded (Instagram / TikTok / Reels / LinkedIn / portfolio).
+A cinematic film about what Real Madrid means, now followed by a functional season layer. The complete experience ships 10 chapters:
 01 MADRID · 02 THE BERNABÉU · 03 BUILT BY LEGENDS · 04 THE ERA OF DOMINANCE · 05 KINGS OF EUROPE ·
-06 90 MINUTES · 07 THE PRESENT · 08 ETERNAL. Spec: `docs/superpowers/specs/2026-08-27-eternal-club-design.md`.
+06 90 MINUTES · 07 THE PRESENT · 08 MATCH CENTRE · 09 NEWSROOM · 10 ETERNAL. Spec: `docs/superpowers/specs/2026-08-27-eternal-club-design.md`.
 
 Stack: Vite · React 19 · TypeScript · Tailwind v4 · Lenis · GSAP ScrollTrigger · Three.js (hero film + legends displacement) · Higgsfield (architecture/atmosphere assets only — never faces).
 
 Dev: `npm run dev` (open at 1920×1080, scroll only) · Build: `npm run build` · Typecheck: `npx tsc -b`
 
-Out of scope by design: mobile, SEO, 404, analytics, backend. v1 (the 10-section site) is archived untouched in `src/archive-v1/`.
+The Match Centre includes a live countdown, competition filters, fixture details and an interactive LaLiga table. Newsroom includes category filters, story views and official-source links. Data is isolated in `src/data/` so a live API can replace the editorial snapshot without changing the UI.
+
+Out of scope by design: mobile, SEO, 404, analytics and backend. v1 is archived untouched in `src/archive-v1/`.
 
 ## Photo credits (v2 additions)
 

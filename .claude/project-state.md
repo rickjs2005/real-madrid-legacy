@@ -1,6 +1,6 @@
 # Real Madrid — The Eternal Club
 
-Tipo: experiência conceitual (portfolio audiovisual, 1920×1080, execução local para gravação de tela)
+Tipo: experiência conceitual + product demo (portfolio audiovisual, 1920×1080)
 Stack: Vite · React 19 · TS · Tailwind v4 · GSAP ScrollTrigger · Lenis · Three.js / R3F · Higgsfield (assets)
 
 ## Progresso
@@ -15,14 +15,17 @@ Fase 08 — Cap. 05 KINGS OF EUROPE         ✓  15 taças · cronologia 1956–
 Fase 09 — Cap. 06 90 MINUTES              ✓  relógio · pulso · manifesto final
 Fase 10 — Cap. 07 THE PRESENT             ✓  elenco em travelling editorial
 Fase 11 — Cap. 08 ETERNAL + assinatura    ✓  Bernabéu · 1902—∞ · MILWEB
-Fase 12 — Som ambiente (opcional)         ○
+Fase 12 — Cap. 08 MATCH CENTRE            ✓  próximo jogo · filtros · calendário · detalhes · tabela
+Fase 13 — Cap. 09 NEWSROOM                ✓  filtros · destaques · modal · fontes oficiais
+Fase 14 — Cap. 10 ETERNAL                 ✓  encerramento renumerado
+Fase 15 — Som ambiente (opcional)         ○
 
 ## Bloqueios
 - Roberto Carlos: só retrato moderno com licença livre (usado em P&B). Trocar se o Rick tiver foto de época própria.
 - Extensão Claude-in-Chrome não conectou; verificação visual feita via Playwright + Edge headless (scratchpad/shoot.mjs).
 
 ## Próxima ação
-Revisão final no monitor 1920×1080 e gravação da experiência completa. O filme agora contém os oito capítulos do roteiro.
+Revisão final no monitor 1920×1080 e gravação da experiência completa. O filme agora termina em uma camada funcional de temporada antes do encerramento.
 
 ## Notas de N/A
 - Responsivo, SEO, sitemap, robots, 404, analytics, backend, formulários: N/A — decisão do briefing (experiência local para gravação, 1920×1080).

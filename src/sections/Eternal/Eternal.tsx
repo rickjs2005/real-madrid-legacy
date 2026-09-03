@@ -30,7 +30,7 @@ export default function Eternal() {
     <section ref={root} id="eternal" className="relative h-screen overflow-hidden bg-black text-white">
       <img data-eternal-bg src="/assets/bernabeu/aerial.webp" alt="Santiago Bernabéu" className="img-dominance absolute inset-0 h-full w-full object-cover opacity-0" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(8,8,8,0.05),#080808_78%)]" />
-      <ChapterMark n="08" title="ETERNAL" right="1902 — ∞" />
+      <ChapterMark n="10" title="ETERNAL" right="1902 — ∞" />
 
       <div data-eternal-content className="absolute inset-0">
         <p data-eternal-badge className="t-serif-i absolute left-[6vw] top-[19vh] text-[4vw] text-silver opacity-0">Players leave. Nights fade.</p>
