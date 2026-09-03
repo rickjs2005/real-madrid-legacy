@@ -37,7 +37,7 @@ export function mountCursor() {
     gsap.to(dot, { scale: next === 'explore' ? 1 : 0, duration: 0.25 })
   }
 
-  window.addEventListener('mousemove', (e) => {
+  const onMouseMove = (e: MouseEvent) => {
     qx(e.clientX)
     qy(e.clientY)
     rx(e.clientX)
@@ -46,7 +46,18 @@ export function mountCursor() {
     if (!el) return apply('explore')
     if (el.hasAttribute('data-cursor-hide')) return apply('hidden')
     apply((el.dataset.cursor as CursorState) ?? 'explore')
-  })
-  document.addEventListener('mouseleave', () => apply('hidden'))
-  document.addEventListener('mouseenter', () => apply('explore'))
+  }
+  const onMouseLeave = () => apply('hidden')
+  const onMouseEnter = () => apply('explore')
+  window.addEventListener('mousemove', onMouseMove)
+  document.addEventListener('mouseleave', onMouseLeave)
+  document.addEventListener('mouseenter', onMouseEnter)
+
+  return () => {
+    window.removeEventListener('mousemove', onMouseMove)
+    document.removeEventListener('mouseleave', onMouseLeave)
+    document.removeEventListener('mouseenter', onMouseEnter)
+    dot.remove()
+    ring.remove()
+  }
 }

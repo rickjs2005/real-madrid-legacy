@@ -9,12 +9,12 @@ Fase 02 — Arquitetura narrativa (8 caps)  ✓  docs/superpowers/specs/2026-08-
 Fase 03 — Design system                   ✓  src/index.css
 Fase 04 — Cap. 01 MADRID (hero)           ✓  intro 1902 → aéreo → túnel WebGL → REAL MADRID → THE ETERNAL CLUB
 Fase 05 — Cap. 02 THE BERNABÉU            ✓  manifesto + travelling
-Fase 06 — Cap. 03 BUILT BY LEGENDS        ◐  preview: Di Stéfano, Puskás, Gento, Raúl, Roberto Carlos, Zidane
-Fase 07 — Cap. 04 DOMINANCE               ○
-Fase 08 — Cap. 05 KINGS OF EUROPE         ○
-Fase 09 — Cap. 06 90 MINUTES              ○
-Fase 10 — Cap. 07 THE PRESENT             ○
-Fase 11 — Cap. 08 ETERNAL + assinatura    ○
+Fase 06 — Cap. 03 BUILT BY LEGENDS        ✓  Di Stéfano, Puskás, Gento, Raúl, Roberto Carlos, Zidane
+Fase 07 — Cap. 04 DOMINANCE               ✓  Cristiano 450 · Ramos 92:48 · geração 2009–2018
+Fase 08 — Cap. 05 KINGS OF EUROPE         ✓  15 taças · cronologia 1956–2024
+Fase 09 — Cap. 06 90 MINUTES              ✓  relógio · pulso · manifesto final
+Fase 10 — Cap. 07 THE PRESENT             ✓  elenco em travelling editorial
+Fase 11 — Cap. 08 ETERNAL + assinatura    ✓  Bernabéu · 1902—∞ · MILWEB
 Fase 12 — Som ambiente (opcional)         ○
 
 ## Bloqueios
@@ -22,7 +22,7 @@ Fase 12 — Som ambiente (opcional)         ○
 - Extensão Claude-in-Chrome não conectou; verificação visual feita via Playwright + Edge headless (scratchpad/shoot.mjs).
 
 ## Próxima ação
-Validar a linguagem com o Rick (gravar a tela). Se aprovado: Cap. 04 (Cristiano 450 · Ramos 92:48 · Marcelo · Benzema · Modrić · Kroos).
+Revisão final no monitor 1920×1080 e gravação da experiência completa. O filme agora contém os oito capítulos do roteiro.
 
 ## Notas de N/A
 - Responsivo, SEO, sitemap, robots, 404, analytics, backend, formulários: N/A — decisão do briefing (experiência local para gravação, 1920×1080).

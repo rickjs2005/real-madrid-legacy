@@ -4,21 +4,35 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Hero from './sections/Hero/Hero'
 import Bernabeu from './sections/Bernabeu/Bernabeu'
 import Legends from './sections/Legends/Legends'
+import Dominance from './sections/Dominance/Dominance'
+import Kings from './sections/Kings/Kings'
+import NinetyMinutes from './sections/NinetyMinutes/NinetyMinutes'
+import Present from './sections/Present/Present'
+import Eternal from './sections/Eternal/Eternal'
 import { initSmoothScroll } from './lib/lenis'
 import { mountVelocity } from './lib/velocity'
 import { mountCursor } from './lib/cursor'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Oito capítulos de um filme, não sections. v0: 01 MADRID · 02 THE BERNABÉU ·
-// 03 BUILT BY LEGENDS (preview). Os demais entram após validar a linguagem.
+// Oito capítulos de um filme, não sections. A progressão alterna tensão,
+// impacto, silêncio e release; o dourado só aparece quando a história entrega
+// glória.
 export default function App() {
   useEffect(() => {
     initSmoothScroll()
-    mountVelocity()
-    mountCursor()
-    document.fonts.ready.then(() => ScrollTrigger.refresh())
-    window.addEventListener('load', () => ScrollTrigger.refresh(), { once: true })
+    const unmountVelocity = mountVelocity()
+    const unmountCursor = mountCursor()
+    let active = true
+    const refresh = () => active && ScrollTrigger.refresh()
+    document.fonts.ready.then(refresh)
+    window.addEventListener('load', refresh, { once: true })
+    return () => {
+      active = false
+      window.removeEventListener('load', refresh)
+      unmountVelocity()
+      unmountCursor()
+    }
   }, [])
   return (
     <>
@@ -31,6 +45,11 @@ export default function App() {
         <Hero />
         <Bernabeu />
         <Legends />
+        <Dominance />
+        <Kings />
+        <NinetyMinutes />
+        <Present />
+        <Eternal />
       </main>
     </>
   )

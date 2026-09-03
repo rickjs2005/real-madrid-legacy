@@ -1,8 +1,9 @@
 # REAL MADRID — THE ETERNAL CLUB
 
 Concept experience · 1920×1080 · runs locally, built to be screen-recorded (Instagram / TikTok / Reels / LinkedIn / portfolio).
-Not a football-results site: a film about what Real Madrid means. 8 chapters — v0 ships the first three
-(01 MADRID · 02 THE BERNABÉU · 03 BUILT BY LEGENDS preview). Spec: `docs/superpowers/specs/2026-08-27-eternal-club-design.md`.
+Not a football-results site: a film about what Real Madrid means. The complete experience ships all 8 chapters:
+01 MADRID · 02 THE BERNABÉU · 03 BUILT BY LEGENDS · 04 THE ERA OF DOMINANCE · 05 KINGS OF EUROPE ·
+06 90 MINUTES · 07 THE PRESENT · 08 ETERNAL. Spec: `docs/superpowers/specs/2026-08-27-eternal-club-design.md`.
 
 Stack: Vite · React 19 · TypeScript · Tailwind v4 · Lenis · GSAP ScrollTrigger · Three.js (hero film + legends displacement) · Higgsfield (architecture/atmosphere assets only — never faces).
 

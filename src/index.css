@@ -133,3 +133,18 @@ body {
 }
 
 ::selection { background: var(--color-gold); color: var(--color-black); }
+
+/* números em traço funcionam como arquitetura, não como decoração. */
+.outline-text {
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-silver) 65%, transparent);
+  text-stroke: 1px color-mix(in srgb, var(--color-silver) 65%, transparent);
+}
+.outline-text-dark {
+  -webkit-text-stroke: 1px rgba(8, 8, 8, 0.42);
+  text-stroke: 1px rgba(8, 8, 8, 0.42);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-live { animation: none; }
+  [data-stretch] { transform: none; }
+}
