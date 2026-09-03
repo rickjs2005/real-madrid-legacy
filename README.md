@@ -1,3 +1,26 @@
+# REAL MADRID — THE ETERNAL CLUB
+
+Concept experience · 1920×1080 · runs locally, built to be screen-recorded (Instagram / TikTok / Reels / LinkedIn / portfolio).
+Not a football-results site: a film about what Real Madrid means. 8 chapters — v0 ships the first three
+(01 MADRID · 02 THE BERNABÉU · 03 BUILT BY LEGENDS preview). Spec: `docs/superpowers/specs/2026-08-27-eternal-club-design.md`.
+
+Stack: Vite · React 19 · TypeScript · Tailwind v4 · Lenis · GSAP ScrollTrigger · Three.js (hero film + legends displacement) · Higgsfield (architecture/atmosphere assets only — never faces).
+
+Dev: `npm run dev` (open at 1920×1080, scroll only) · Build: `npm run build` · Typecheck: `npx tsc -b`
+
+Out of scope by design: mobile, SEO, 404, analytics, backend. v1 (the 10-section site) is archived untouched in `src/archive-v1/`.
+
+## Photo credits (v2 additions)
+
+- Ferenc Puskás, Feyenoord v Real Madrid, 1965 — Joost Evers / Anefo, CC0 — https://commons.wikimedia.org/wiki/File:Feyenoord_tegen_Real_Madrid_2-1,_Puskas_in_duel_met_Guus_Haak,_Bestanddeelnr_918-1560.jpg
+- Paco Gento, Feyenoord v Real Madrid, 1965 — Rob Bogaerts / Anefo, CC BY 2.0 — https://commons.wikimedia.org/wiki/File:Feyenoord_tegen_Real_Madrid_2-1,_spelmomenten._Gento_(cropped).jpg
+- Roberto Carlos, 2023 — Flickr via Wikimedia Commons, CC BY 2.0 — https://commons.wikimedia.org/wiki/File:LS3_1288_(53332367864)_(cropped).jpg
+- Bernabéu facade reference used for AI reframes: MottaW, CC BY 4.0 (see below)
+
+---
+
+<details><summary>v1 README (archived)</summary>
+
 # REAL MADRID — THE LEGACY
 
 Unofficial concept · one-page cinematic experience · desktop-only (built for recording)
@@ -37,3 +60,5 @@ Photos sourced from Wikimedia Commons under their individual licenses:
 - Santiago Bernabéu Stadium, Real Madrid v Borussia Dortmund (Champions League semi-final), 30 Apr 2013 — Little Savage, CC BY-SA 3.0 — https://commons.wikimedia.org/wiki/File:Santiago_Bernab%C3%A9u_Stadium,_Real_Madrid_-_Borussia_Dortmund,_2013_-_11.jpg
 
 Club crest, kit product shots and two trophy silhouettes (La Liga, Copa del Rey) were not sourced (trademark / no clean free-license image found) — see `public/assets/ASSETS.md` for the full slot-by-slot status.
+
+</details>

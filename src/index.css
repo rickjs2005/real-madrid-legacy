@@ -1,24 +1,135 @@
 @import 'tailwindcss';
 
+/* ——— REAL MADRID · THE ETERNAL CLUB · design tokens ——— */
 @theme {
-  --color-day: #f5f4f0;
-  --color-dusk: #2a2d3a;
-  --color-night: #05070f;
-  /* dourado profundo: legível sobre branco (contraste ~3.5:1 em display) */
-  --color-gold: #a5802f;
-  /* dourado brilhante: reservado à noite (Bernabéu) e a linhas sobre foto */
-  --color-gold-bright: #d9b25f;
-  --color-ink: #0a0a0a;
-  --font-display: 'Anton', sans-serif;
-  --font-sans: 'Space Grotesk Variable', sans-serif;
+  --color-white: #f5f5f2;
+  --color-pure: #ffffff;
+  --color-black: #080808;
+  --color-graphite: #181818;
+  --color-silver: #bfc1c4;
+  --color-gold: #b89b5e;
+  --color-blue: #152e91;
+
+  --font-display: 'Archivo Variable', 'Archivo', sans-serif;
+  --font-serif: 'Instrument Serif', 'Times New Roman', serif;
+  --font-mono: 'Space Grotesk Variable', sans-serif;
+}
+
+:root {
+  /* velocidade de scroll normalizada (-1..1), escrita pelo lib/velocity */
+  --vel: 0;
+  cursor: none;
 }
 
 html {
-  background: var(--color-day);
+  background: var(--color-black);
+  scrollbar-width: none;
 }
+html::-webkit-scrollbar { display: none; }
 
 body {
-  font-family: var(--font-sans);
-  color: var(--color-ink);
+  font-family: var(--font-mono);
+  color: var(--color-white);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* ——— tipografia como sistema ——— */
+.t-display {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' 125, 'wght' 800;
+  letter-spacing: -0.045em;
+  line-height: 0.82;
+  text-transform: uppercase;
+}
+.t-display-thin {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' 110, 'wght' 300;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+.t-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+}
+.t-serif-i {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 0.95;
+}
+.t-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+  font-variation-settings: 'wght' 500;
+}
+.t-num {
+  font-family: var(--font-display);
+  font-variation-settings: 'wdth' 100, 'wght' 700;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+  font-variant-numeric: tabular-nums;
+}
+
+/* máscara de linha para reveals: esconde o texto abaixo da linha de base sem
+   decepar acentos e ascendentes (padding compensado por margem negativa) */
+.mask-line {
+  overflow: hidden;
+  padding: 0.14em 0.06em 0.08em;
+  margin: -0.14em -0.06em -0.08em;
+}
+
+/* linha fina prata */
+.rule { height: 1px; background: color-mix(in srgb, var(--color-silver) 25%, transparent); }
+.rule-v { width: 1px; background: color-mix(in srgb, var(--color-silver) 25%, transparent); }
+
+/* ——— tratamento de imagem por era ——— */
+.img-archive {
+  filter: grayscale(1) contrast(0.92) brightness(0.95) sepia(0.18);
+}
+.img-flash {
+  filter: saturate(0.55) contrast(1.25) brightness(1.05);
+}
+.img-dominance {
+  filter: grayscale(1) contrast(1.35) brightness(0.92);
+}
+.img-present {
+  filter: saturate(0.9) contrast(1.05);
+}
+
+/* grain: SVG estático repetido, custo fixo */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-4%, 3%); }
+  50% { transform: translate(3%, -5%); }
+  75% { transform: translate(-2%, -2%); }
+  100% { transform: translate(4%, 4%); }
+}
+.grain-live { animation: grain-shift 0.5s steps(4) infinite; }
+
+/* scanline CRT sutil (era II) */
+.crt::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* velocity stretch em headlines: skew acompanha a velocidade do scroll */
+[data-stretch] {
+  transform: skewY(calc(var(--vel) * -4deg)) scaleY(calc(1 + var(--vel) * var(--vel) * 0.25));
+  transform-origin: center;
+  will-change: transform;
+}
+
+::selection { background: var(--color-gold); color: var(--color-black); }

@@ -103,3 +103,29 @@ Notas de sourcing:
   descartada após preview visual — Benzema aparece de terno, gravata e óculos escuros, sem a camisa do
   clube visível. Não foram encontradas fotos de Кирилл Венедиктов/Kirill Venediktov (soccer.ru)
   especificamente de Benzema em 2022 nesta busca.
+
+## v2 — THE ETERNAL CLUB (2026-08-27)
+
+### `legends/` — fotografias reais (Wikimedia Commons)
+
+| Arquivo | Origem | Autor | Licença | Nota |
+|---|---|---|---|---|
+| legends/di-stefano.webp | = legacy/1956.webp (Di Stefano 1959.jpg) | Wim van Rossem / Anefo | CC0 | retrato de vestiário, 1959 |
+| legends/puskas.webp | [Feyenoord tegen Real Madrid 2-1, Puskas in duel met Guus Haak, Bestanddeelnr 918-1560.jpg](https://commons.wikimedia.org/wiki/File:Feyenoord_tegen_Real_Madrid_2-1,_Puskas_in_duel_met_Guus_Haak,_Bestanddeelnr_918-1560.jpg) | Joost Evers / Anefo (Nationaal Archief) | CC0 | recorte 3:4 sobre Puskás (camisa branca), 1965 |
+| legends/gento.webp | [Feyenoord tegen Real Madrid 2-1, spelmomenten. Gento (cropped).jpg](https://commons.wikimedia.org/wiki/File:Feyenoord_tegen_Real_Madrid_2-1,_spelmomenten._Gento_(cropped).jpg) | Rob Bogaerts / Anefo | CC BY 2.0 | recorte retrato, 1965 (nativo 1029px — ampliado 2×, coberto pelo grain de arquivo) |
+| legends/raul.webp | = legacy/1998.webp (Raúl González 11dic2008.jpg) | Tsutomu Takasu | CC BY 2.0 | em jogo, 2008 |
+| legends/roberto-carlos.webp | [LS3 1288 (53332367864) (cropped).jpg](https://commons.wikimedia.org/wiki/File:LS3_1288_(53332367864)_(cropped).jpg) | Flickr (via Commons) | CC BY 2.0 | **retrato moderno (2023)** — não existe foto de época com licença livre; usado em P&B alto contraste no shader |
+| legends/zidane.webp | = legacy/2002.webp (Zinedine Zidane.jpg) | Walterlan Papetti | CC BY-SA 2.0 | retrato 2013, tratado como flash/CRT |
+
+### `film/` — Higgsfield (IA, apenas arquitetura/atmosfera — nunca rostos)
+
+| Arquivo | Modelo | Função |
+|---|---|---|
+| film/tunnel/f_001…f_240.webp | flux_3_video (start: túnel · end: pitch reveal), 8s 1080p → 30fps | filme do hero, scrubado pelo scroll |
+| film/tunnel.webp · film/pitch-reveal.webp | cinematic_studio_2_5 2k | keyframes do filme + fallback |
+| film/aerial.webp · film/aerial.mp4 | cinematic_studio_2_5 2k com a foto real da fachada (bernabeu/aerial.webp) como referência · flux_3_video 6s | exterior do Bernabéu na intro do hero |
+| film/facade-low.webp · film/facade.mp4 | idem, referência da fachada real · flux_3_video 6s travelling | cap. 02 (manifesto + travelling) |
+| film/facade-macro.webp | recorte de facade-low | cap. 02 |
+| film/lights.webp | recorte de pitch-reveal | cap. 02 |
+
+Descartados: aéreas sem referência (estádios genéricos), macro de fachada texto-only (escura, aparência de madeira), pitch diurno.
