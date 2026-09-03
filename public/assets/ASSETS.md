@@ -6,7 +6,7 @@ IA (Higgsfield): SOMENTE texturas/atmosferas, nunca rostos.
 
 | Path | Conteúdo | Fonte | Status |
 |---|---|---|---|
-| hero/crest.webp | Escudo RM alto contraste | — | **pulado** (marca registrada, não sourced) |
+| brand/real-madrid-crest.svg | Escudo atual do Real Madrid | Wikipedia (ver nota) | **preenchido** — solicitado para o fechamento do conceito |
 | hero/stadium-night.webp | Bernabéu de noite, jogo cheio, fundo full-viewport da seção Hero | Wikimedia Commons (ver créditos) | **preenchido** |
 | squad/p01.webp … p06.webp | 1 foto por jogador de squad.ts, corpo inteiro, fundo removido | Wikimedia Commons (ver créditos) | **preenchido** |
 | legacy/1902.webp … 2024.webp | 1 foto histórica por era de legacy.ts | Wikimedia Commons (ver créditos) | **preenchido** |
@@ -24,7 +24,12 @@ IA (Higgsfield): SOMENTE texturas/atmosferas, nunca rostos.
 
 Todas as fotos abaixo vêm do Wikimedia Commons, licenciadas Domínio Público, CC0, CC BY ou CC BY-SA.
 Nenhuma imagem sem licença livre verificada foi usada. Nenhum brasão/escudo do clube ou material de
-marketing de produto foi sourced (ver linhas "pulado" acima).
+marketing de produto havia sido usado na primeira versão (ver linhas "pulado" acima).
+
+O arquivo `brand/real-madrid-crest.svg` foi incluído posteriormente a pedido do autor do conceito,
+a partir do arquivo de identificação visual hospedado pela Wikipedia. O escudo é marca registrada do
+Real Madrid C.F.; aparece somente no contexto editorial do projeto não oficial, acompanhado do aviso
+de não afiliação no encerramento.
 
 | Slot | Arquivo Commons | Autor | Licença |
 |---|---|---|---|
