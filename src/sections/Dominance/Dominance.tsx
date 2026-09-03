@@ -34,18 +34,20 @@ export default function Dominance() {
           scrollTrigger: { trigger: '[data-dom-cr7]', start: 'top top', end: '+=300%', pin: true, scrub: 0.8 },
         })
         .fromTo('[data-dom-photo]', { opacity: 0, scale: 1.16 }, { opacity: 0.72, scale: 1, duration: 0.35, ease: 'power2.out' }, 0)
-        .fromTo('[data-dom-kicker]', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.05)
+        .fromTo('[data-dom-kicker]', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.09, ease: 'power3.out' }, 0.04)
+        .to('[data-dom-kicker]', { opacity: 0, y: -16, duration: 0.06, ease: 'power2.in' }, 0.2)
+        .fromTo('[data-dom-count]', { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: 0.07, ease: 'expo.out' }, 0.23)
         .to(goalState, {
           value: 450,
-          duration: 0.38,
+          duration: 0.3,
           ease: 'power4.out',
           onUpdate: () => {
             if (goals.current) goals.current.textContent = String(Math.round(goalState.value)).padStart(3, '0')
           },
-        }, 0.12)
-        .fromTo('[data-dom-name] .mask-line > span', { yPercent: 110 }, { yPercent: 0, duration: 0.09, ease: 'expo.out' }, 0.3)
-        .fromTo('[data-dom-meta]', { opacity: 0 }, { opacity: 1, duration: 0.08 }, 0.38)
-        .to('[data-dom-photo]', { xPercent: 5, ease: 'none', duration: 0.62 }, 0.38)
+        }, 0.24)
+        .fromTo('[data-dom-name] .mask-line > span', { yPercent: 110 }, { yPercent: 0, duration: 0.09, ease: 'expo.out' }, 0.43)
+        .fromTo('[data-dom-meta]', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.08, ease: 'power3.out' }, 0.51)
+        .to('[data-dom-photo]', { xPercent: 4, ease: 'none', duration: 0.62 }, 0.38)
         .to('[data-dom-scene]', { opacity: 0, duration: 0.08 }, 0.92)
 
       const clockState = { value: 90 * 60 }
@@ -107,10 +109,10 @@ export default function Dominance() {
 
   return (
     <section ref={root} id="dominance" className="relative bg-black text-white">
-      <div data-dom-cr7 data-cursor="view" className="relative h-screen overflow-hidden bg-black">
+      <div data-dom-cr7 className="relative h-screen overflow-hidden bg-black">
         <ChapterMark n="04" title="THE ERA OF DOMINANCE" right="2009 — 2018" />
         <div data-dom-photo className="absolute inset-y-0 right-0 w-[48vw] opacity-0">
-          <img src="/assets/legacy/2014.webp" alt="Cristiano Ronaldo" className="img-dominance h-full w-full object-cover object-top" />
+          <img src="/assets/legacy/2018.webp" alt="Cristiano Ronaldo" className="img-dominance h-full w-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-black via-black/25 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/30" />
         </div>
@@ -121,9 +123,9 @@ export default function Dominance() {
             the ceiling.
           </p>
           <div className="absolute bottom-[6vh] left-[6vw] z-10">
-            <div className="flex items-end gap-6">
-              <span ref={goals} data-stretch className="t-num text-[25vw] text-gold">000</span>
-              <span className="t-label mb-[3.8vw]">GOALS<br />FOR REAL MADRID</span>
+            <div data-dom-count className="flex items-end gap-[3vw] opacity-0">
+              <span ref={goals} data-stretch className="t-num text-[23vw] text-gold">000</span>
+              <span className="t-label mb-[3.2vw]">GOALS<br />FOR REAL MADRID</span>
             </div>
             <h2 data-dom-name className="t-display -mt-[1vw] text-[9vw] text-pure">
               <span className="mask-line block"><span className="block">Cristiano Ronaldo.</span></span>
