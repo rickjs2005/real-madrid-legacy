@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { initSmoothScroll } from '../../lib/lenis'
-import { mountHeroFilm } from './HeroFilm'
+import { supportsWebGL } from '../../lib/webgl'
+import { mountHeroFilm, type HeroFilmHandle } from './HeroFilm'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -16,7 +17,25 @@ export default function Hero() {
   const aerialRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
-    const film = mountHeroFilm(canvas.current!)
+    const filmCanvas = canvas.current!
+    const fallbackFilm: HeroFilmHandle = {
+      setProgress: (progress) => {
+        filmCanvas.style.transform = `scale(${1.08 - progress * 0.08})`
+        filmCanvas.style.filter = `grayscale(1) contrast(1.2) brightness(${0.8 - progress * 0.35})`
+      },
+      dispose: () => {},
+    }
+    filmCanvas.style.background = "center / cover no-repeat url('/assets/film/pitch-reveal.webp')"
+
+    let film = fallbackFilm
+    if (supportsWebGL()) {
+      try {
+        film = mountHeroFilm(filmCanvas)
+        filmCanvas.style.background = 'none'
+      } catch {
+        film = fallbackFilm
+      }
+    }
     const lenis = initSmoothScroll()
 
     const ctx = gsap.context(() => {

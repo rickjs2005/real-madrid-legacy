@@ -10,6 +10,7 @@ import {
   type Competition,
   type Match,
 } from '../../data/season'
+import MatchPosterArt, { ClubBadge } from './MatchPosterArt'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -105,18 +106,13 @@ export default function MatchCentre() {
     [competition],
   )
   const nextDate = formatMatchDate(nextMatch.dateISO)
-  const nextRound = nextMatch.round.match(/\d+/)?.[0] ?? '01'
 
   return (
     <section ref={root} id="match-centre" className="relative overflow-hidden bg-pure text-black">
       <div data-match-stage className="relative flex min-h-screen flex-col justify-between px-[6vw] pb-[6vh] pt-[15vh]">
         <ChapterMark n="08" title="MATCH CENTRE" right={`${seasonSnapshot.season} · LIVE LAYER`} tone="black" />
 
-        <div className="absolute inset-0 overflow-hidden">
-          <span className="t-num outline-text-dark absolute -right-[3vw] top-[6vh] text-[39vw] text-transparent opacity-[0.13]">
-            {nextRound}
-          </span>
-        </div>
+        <MatchPosterArt home={nextMatch.home} away={nextMatch.away} round={nextMatch.round} />
 
         <div data-match-reveal className="relative z-10 flex items-end justify-between border-b border-black/20 pb-[3vh] opacity-0">
           <div>
@@ -133,7 +129,10 @@ export default function MatchCentre() {
           <div className="text-right">
             <p className="t-label mb-4 text-black/50">HOME</p>
             <h2 className="t-display text-[7.4vw]">{clubName(nextMatch.home)}</h2>
-            <p className="t-label mt-5 text-black/50">{nextMatch.venue}</p>
+            <div className="mt-5 flex items-center justify-end gap-4">
+              <p className="t-label text-black/50">{nextMatch.venue}</p>
+              <ClubBadge club={nextMatch.home} light />
+            </div>
           </div>
 
           <div className="flex flex-col items-center">
@@ -147,9 +146,7 @@ export default function MatchCentre() {
             <p className="t-label mb-4 text-black/50">AWAY</p>
             <h2 className="t-display text-[7.4vw]">{clubName(nextMatch.away)}</h2>
             <div className="mt-5 flex items-center gap-4">
-              {(nextMatch.home === 'REAL MADRID' || nextMatch.away === 'REAL MADRID') && (
-                <img src="/assets/brand/real-madrid-crest.svg" alt="Real Madrid crest" className="h-10 w-auto" />
-              )}
+              <ClubBadge club={nextMatch.away} light />
               <p className="t-label text-black/50">{nextMatch.round}</p>
             </div>
           </div>

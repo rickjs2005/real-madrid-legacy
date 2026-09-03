@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import type { MutableRefObject } from 'react'
 import { getVelocity } from '../../lib/velocity'
+import { supportsWebGL } from '../../lib/webgl'
 
 // A moldura das lendas como quad WebGL: a transição entre fotografias é um
 // displacement — a luminância de cada foto distorce a outra durante a troca.
@@ -140,6 +141,32 @@ function Panel({ pos, era, urls }: { pos: MutableRefObject<number>; era: Mutable
   )
 }
 
+function FallbackPanel({ pos, era, urls }: { pos: MutableRefObject<number>; era: MutableRefObject<number>; urls: string[] }) {
+  const image = useRef<HTMLImageElement>(null)
+
+  useEffect(() => {
+    let frame = 0
+    let current = -1
+    const update = () => {
+      const next = Math.min(Math.max(Math.round(pos.current), 0), urls.length - 1)
+      if (image.current) {
+        if (next !== current) {
+          current = next
+          image.current.src = urls[next]
+        }
+        image.current.style.filter = era.current < 0.5
+          ? 'grayscale(1) contrast(.92) sepia(.18)'
+          : 'grayscale(1) contrast(1.25) brightness(1.05)'
+      }
+      frame = requestAnimationFrame(update)
+    }
+    update()
+    return () => cancelAnimationFrame(frame)
+  }, [era, pos, urls])
+
+  return <img ref={image} src={urls[0]} alt="" className="h-full w-full object-cover transition-opacity duration-300" />
+}
+
 export default function LegendsFrame({
   pos,
   era,
@@ -149,6 +176,8 @@ export default function LegendsFrame({
   era: MutableRefObject<number>
   urls: string[]
 }) {
+  if (!supportsWebGL()) return <FallbackPanel pos={pos} era={era} urls={urls} />
+
   return (
     <Canvas dpr={[1, 1.5]} gl={{ antialias: false }}>
       <Panel pos={pos} era={era} urls={urls} />
