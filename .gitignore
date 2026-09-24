@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .superpowers/
+
+# local or generated files (not versioned)
+.claude/project-state.md
