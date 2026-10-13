@@ -27,3 +27,11 @@ dist-ssr
 
 # local or generated files (not versioned)
 .claude/project-state.md
+
+# Environment files (keep only the example)
+.env
+.env.*
+!.env.example
+
+# Test coverage
+coverage
